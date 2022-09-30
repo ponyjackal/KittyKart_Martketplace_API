@@ -51,21 +51,21 @@ model Asset {
   updated_at         DateTime @updatedAt
 }
 
+enum ATTRIBUTE_USE_STATUS {
+  NOT_APPLIED
+  ACCEPTED
+  REJECTED
+}
+
 model Attribute {
-  id                 Int      @id @default(autoincrement())
-  asset_id           Int
-  kart_id            Int?
-  name               String
-  description        String?
-  owner_address      String
-  collection_address String
-  image              String?
-  external_url       String?
-  animation_url      String?
-  background_color   String?
-  minted_at          DateTime
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  id         Int                  @id @default(autoincrement())
+  asset_id   Int
+  kart_id    Int?
+  trait_type String
+  value      String?
+  in_use     ATTRIBUTE_USE_STATUS
+  created_at DateTime             @default(now())
+  updated_at DateTime             @updatedAt
 }
 
 enum LISTING_STATUS {
