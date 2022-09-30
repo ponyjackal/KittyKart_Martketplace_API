@@ -10,8 +10,124 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model Collection {
+  id         Int      @id @default(autoincrement())
+  address    String   @unique
+  name       String
+  symbol     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Kart {
+  id                 Int      @id @default(autoincrement())
+  token_id           Int      @unique
+  name               String
+  description        String
+  owner_address      String
+  collection_address String
+  image              String
+  external_url       String
+  animation_url      String
+  background_color   String
+  minted_at          DateTime
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+}
+
+model Asset {
+  id                 Int      @id @default(autoincrement())
+  token_id           Int      @unique
+  name               String
+  description        String?
+  owner_address      String
+  collection_address String
+  image              String?
+  external_url       String?
+  animation_url      String?
+  background_color   String?
+  minted_at          DateTime
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+}
+
+model Attribute {
+  id                 Int      @id @default(autoincrement())
+  asset_id           Int
+  kart_id            Int?
+  name               String
+  description        String?
+  owner_address      String
+  collection_address String
+  image              String?
+  external_url       String?
+  animation_url      String?
+  background_color   String?
+  minted_at          DateTime
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+}
+
+enum LISTING_STATUS {
+  ACTIVE
+  SOLD
+  CANCELED
+}
+
+model Listing {
+  id                 Int            @id @default(autoincrement())
+  listing_id         String         @unique
+  collection_address String
+  token_id           Int
+  price              Float
+  seller_address     String
+  buyer_address      String?
+  status             LISTING_STATUS @default(ACTIVE)
+  listed_at          DateTime
+  sold_at            DateTime?
+  created_at         DateTime       @default(now())
+  updated_at         DateTime       @updatedAt
+}
+
+enum OFFER_STATUS {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Offer {
+  id            Int          @id @default(autoincrement())
+  listing_id    String       @unique
+  reqest_from   String
+  request_price Float
+  status        OFFER_STATUS @default(PENDING)
+  requested_at  DateTime
+  accepted_at   DateTime?
+  rejected_at   DateTime?
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+}
+
+model Account {
+  id         Int      @id @default(autoincrement())
+  address    String   @unique
+  signature  String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model ImageAttribute {
+  id         Int      @id @default(autoincrement())
+  image_id   String
+  trait_type String
+  value      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
