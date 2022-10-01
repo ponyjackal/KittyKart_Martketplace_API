@@ -45,11 +45,11 @@ model Asset {
   id                 Int         @id @default(autoincrement())
   token_id           Int         @unique
   name               String
-  description        String?
+  description        String
   owner_address      String
   collection_address String
-  image              String?
-  external_url       String?
+  image              String
+  external_url       String
   animation_url      String?
   background_color   String?
   minted_at          DateTime
@@ -71,7 +71,7 @@ model Attribute {
   asset_id   Int
   kart_id    Int?
   trait_type String
-  value      String?
+  value      String
   in_use     ATTRIBUTE_USE_STATUS @default(NOT_APPLIED)
   created_at DateTime             @default(now())
   updated_at DateTime             @updatedAt
@@ -126,16 +126,16 @@ model Offer {
 }
 
 model Account {
-  id         Int       @id @default(autoincrement())
-  address    String    @unique
-  signature  String    @unique
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  offers     Offer[]
-  kart       Kart[]
-  asset      Asset[]
-  Listing    Listing[]
-  Listing    Listing[]
+  id               Int       @id @default(autoincrement())
+  address          String    @unique
+  signature        String    @unique
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  offers           Offer[]
+  karts            Kart[]
+  assets           Asset[]
+  listingsAsBuyer  Listing[] @relation(name: "Buyer")
+  listingsAsSeller Listing[] @relation(name: "Seller")
 }
 
 model Image {
