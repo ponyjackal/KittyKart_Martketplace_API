@@ -148,11 +148,12 @@ model Image {
 }
 
 model ImageAttribute {
-  id         Int      @id @default(autoincrement())
-  image_id   Int
-  trait_type String
-  value      String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  image      Image    @relation(fields: [image_id], references: [id])
+  id           Int      @id @default(autoincrement())
+  image_id     Int
+  trait_type   String
+  value        String
+  display_type String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  image        Image    @relation(fields: [image_id], references: [id])
 }
