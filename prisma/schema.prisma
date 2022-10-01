@@ -11,17 +11,20 @@ datasource db {
 }
 
 model Collection {
-  id         Int      @id @default(autoincrement())
-  address    String   @unique
+  id         Int       @id @default(autoincrement())
+  address    String    @unique
   name       String
   symbol     String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  karts      Kart[]
+  assets     Asset[]
+  listings   Listing[]
 }
 
 model Kart {
-  id                 Int      @id @default(autoincrement())
-  token_id           Int      @unique
+  id                 Int         @id @default(autoincrement())
+  token_id           Int         @unique
   name               String
   description        String
   owner_address      String
@@ -31,13 +34,16 @@ model Kart {
   animation_url      String
   background_color   String
   minted_at          DateTime
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  created_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
+  owner              Account     @relation(fields: [owner_address], references: [address])
+  collection         Collection  @relation(fields: [collection_address], references: [address])
+  attributes         Attribute[]
 }
 
 model Asset {
-  id                 Int      @id @default(autoincrement())
-  token_id           Int      @unique
+  id                 Int         @id @default(autoincrement())
+  token_id           Int         @unique
   name               String
   description        String?
   owner_address      String
@@ -47,14 +53,17 @@ model Asset {
   animation_url      String?
   background_color   String?
   minted_at          DateTime
-  created_at         DateTime @default(now())
-  updated_at         DateTime @updatedAt
+  created_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
+  owner              Account     @relation(fields: [owner_address], references: [address])
+  collection         Collection  @relation(fields: [collection_address], references: [address])
+  attributes         Attribute[]
 }
 
 enum ATTRIBUTE_USE_STATUS {
   NOT_APPLIED
-  ACCEPTED
-  REJECTED
+  CURRENTLY_APPLIED
+  EXPIRED
 }
 
 model Attribute {
@@ -63,9 +72,11 @@ model Attribute {
   kart_id    Int?
   trait_type String
   value      String?
-  in_use     ATTRIBUTE_USE_STATUS
+  in_use     ATTRIBUTE_USE_STATUS @default(NOT_APPLIED)
   created_at DateTime             @default(now())
   updated_at DateTime             @updatedAt
+  asset      Asset                @relation(fields: [asset_id], references: [token_id])
+  kart       Kart?                @relation(fields: [kart_id], references: [token_id])
 }
 
 enum LISTING_STATUS {
@@ -87,6 +98,10 @@ model Listing {
   sold_at            DateTime?
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
+  offers             Offer[]
+  seller             Account        @relation(name: "Seller", fields: [seller_address], references: [address])
+  buyer              Account?       @relation(name: "Buyer", fields: [buyer_address], references: [address])
+  collection         Collection     @relation(fields: [collection_address], references: [address])
 }
 
 enum OFFER_STATUS {
@@ -98,7 +113,7 @@ enum OFFER_STATUS {
 model Offer {
   id            Int          @id @default(autoincrement())
   listing_id    String       @unique
-  reqest_from   String
+  request_from  String
   request_price Float
   status        OFFER_STATUS @default(PENDING)
   requested_at  DateTime
@@ -106,28 +121,38 @@ model Offer {
   rejected_at   DateTime?
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
+  listing       Listing      @relation(fields: [listing_id], references: [listing_id])
+  requester     Account      @relation(fields: [request_from], references: [address])
 }
 
 model Account {
-  id         Int      @id @default(autoincrement())
-  address    String   @unique
-  signature  String   @unique
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  address    String    @unique
+  signature  String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  offers     Offer[]
+  kart       Kart[]
+  asset      Asset[]
+  Listing    Listing[]
+  Listing    Listing[]
 }
 
 model Image {
-  id         Int      @id @default(autoincrement())
-  url        String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id              Int              @id @default(autoincrement())
+  image_url       String
+  animation_url   String
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+  imageAttributes ImageAttribute[]
 }
 
 model ImageAttribute {
   id         Int      @id @default(autoincrement())
-  image_id   String
+  image_id   Int
   trait_type String
   value      String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  image      Image    @relation(fields: [image_id], references: [id])
 }
