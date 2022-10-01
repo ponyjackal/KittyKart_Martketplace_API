@@ -90,7 +90,7 @@ model Listing {
   listing_id         String         @unique
   collection_address String
   token_id           Int
-  price              Float
+  price              String
   seller_address     String
   buyer_address      String?
   status             LISTING_STATUS @default(ACTIVE)
@@ -114,7 +114,7 @@ model Offer {
   id            Int          @id @default(autoincrement())
   listing_id    String       @unique
   request_from  String
-  request_price Float
+  request_price String
   status        OFFER_STATUS @default(PENDING)
   requested_at  DateTime
   accepted_at   DateTime?
