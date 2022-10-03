@@ -136,6 +136,8 @@ model Account {
   assets           Asset[]
   listingsAsBuyer  Listing[] @relation(name: "Buyer")
   listingsAsSeller Listing[] @relation(name: "Seller")
+  username         String    @unique
+  nonce            Int       @default(autoincrement())
 }
 
 model Image {
