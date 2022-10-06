@@ -14,6 +14,3 @@ ALTER TABLE "Listing" ALTER COLUMN "price" SET DATA TYPE TEXT;
 
 -- AlterTable
 ALTER TABLE "Offer" ALTER COLUMN "request_price" SET DATA TYPE TEXT;
-
--- CreateIndex
-CREATE UNIQUE INDEX "Account_username_key" ON "Account"("username");

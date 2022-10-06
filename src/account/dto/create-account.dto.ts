@@ -1,1 +1,3 @@
-export class CreateAccountDto {}
+export class CreateAccountDto {
+    address: string;
+}
