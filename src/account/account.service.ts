@@ -13,6 +13,7 @@ export class AccountService {
     return this.prisma.account.create({ data: {
       address: createAccountDto.address.toLowerCase(), // store address in lowercase
       username: Math.random().toString(36).substr(2, 5),
+      nonce: Math.floor(Math.random() * 1000000)
     } });
   }
 
@@ -27,7 +28,15 @@ export class AccountService {
       create: {
         address: address.toLowerCase(),
         username: Math.random().toString(36).substr(2, 5),
+        nonce: Math.floor(Math.random() * 1000000)
       }
+    });
+  }
+
+  updateNonce(address: string) {
+    return this.prisma.account.update({
+      where: { address },
+      data: { nonce: Math.floor(Math.random() * 1000000) }
     });
   }
 

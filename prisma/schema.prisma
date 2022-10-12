@@ -137,7 +137,7 @@ model Account {
   listingsAsBuyer  Listing[] @relation(name: "Buyer")
   listingsAsSeller Listing[] @relation(name: "Seller")
   username         String
-  nonce            Int       @default(autoincrement())
+  nonce            Int
 }
 
 model Image {
