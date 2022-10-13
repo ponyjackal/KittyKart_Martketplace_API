@@ -1,28 +1,15 @@
 FROM node:alpine
 
 WORKDIR /app
-
-# COPY package.json and package-lock.json files
-COPY package*.json ./
-
-# generated prisma files
-COPY prisma ./prisma/
-
-# COPY ENV variable
-COPY .env ./
-
-# COPY tsconfig.json file
+RUN npm install -g pm2
+COPY db_migrate /usr/local/bin/
+COPY app.config.js ./
 COPY tsconfig.json ./
-
-# COPY
-COPY . .
-
-RUN yarn install
-
+COPY package*.json ./
+RUN chmod 755 /usr/local/bin/db_migrate && npm install
+COPY ./dist ./
+RUN mkdir ./prisma
+COPY ./prisma ./prisma/
 RUN npx prisma generate
-
-# Run and expose the server on port 3000
 EXPOSE 3000
-
-# A command to start the server
-CMD yarn start
+CMD /usr/local/bin/db_migrate -p ./prisma/ && pm2-runtime --raw app.config.js
