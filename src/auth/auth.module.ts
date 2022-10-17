@@ -12,10 +12,7 @@ import { WalletStrategy } from './wallet.strategy';
   imports: [
     PassportModule,
     AccountModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '600s' },
-    })
+    JwtModule.register({})
   ],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy, WalletStrategy],
   controllers: [AuthController],
