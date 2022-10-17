@@ -138,6 +138,8 @@ model Account {
   listingsAsSeller Listing[] @relation(name: "Seller")
   username         String
   nonce            Int
+  accessToken      String?
+  refreshToken     String?
 }
 
 model Image {
