@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+import { Public } from '../app.decorator';
 
 @Controller('account')
 export class AccountController {
@@ -18,6 +19,7 @@ export class AccountController {
   }
 
   @Get(':address')
+  @Public()
   findOne(@Param('address') address: string) {
     return this.accountService.findOne(address);
   }

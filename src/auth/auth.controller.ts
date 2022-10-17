@@ -14,7 +14,7 @@ export class AuthController {
 
     @Public()
     @Post('login')
-    async register(@Request() req, @Res() res: Response){
+    async login(@Request() req, @Res() res: Response){
         const { address, signature } = req.body;
         if(!address || !signature) {
            return res.status(HttpStatus.BAD_REQUEST).send();
@@ -27,6 +27,8 @@ export class AuthController {
         const token = await this.authService.login(account);
         // update nonce
         await this.accountService.updateNonce(address);
+        // update signature
+        await this.accountService.updateSignature(address, signature);
 
         return res.status(HttpStatus.OK).json(token);
     }
