@@ -21,9 +21,10 @@ export class AccountService {
     return this.prisma.account.findMany();
   }
 
+  // find or create an account
   findOne(address: string) {
     return this.prisma.account.upsert({
-      where: { address },
+      where: { address: address.toLowerCase() },
       update: {},
       create: {
         address: address.toLowerCase(),
@@ -35,8 +36,15 @@ export class AccountService {
 
   updateNonce(address: string) {
     return this.prisma.account.update({
-      where: { address },
+      where: { address: address.toLowerCase() },
       data: { nonce: Math.floor(Math.random() * 1000000) }
+    });
+  }
+
+  updateSignature(address: string, signature: string) {
+    return this.prisma.account.update({
+      where: { address: address.toLowerCase() },
+      data: { signature }
     });
   }
 
