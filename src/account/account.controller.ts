@@ -20,15 +20,15 @@ export class AccountController {
     return this.accountService.findOne(address);
   }
 
-  @Patch(':id')
+  @Patch(':address')
   @UseGuards(AccessTokenGuard)
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountService.update(+id, updateAccountDto);
+  update(@Param('address') address: string, @Body() updateAccountDto: UpdateAccountDto) {
+    return this.accountService.update(address, updateAccountDto);
   }
 
-  @Delete(':id')
+  @Delete(':address')
   @UseGuards(AccessTokenGuard)
-  remove(@Param('id') id: string) {
-    return this.accountService.remove(+id);
+  remove(@Param('address') address: string) {
+    return this.accountService.remove(address);
   }
 }
