@@ -1,19 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { AccountService } from './account.service';
-import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Public } from '../app.decorator';
+import { AccessTokenGuard } from '../auth/accessToken.guard';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @Post()
-  create(@Body() createAccountDto: CreateAccountDto) {
-    return this.accountService.create(createAccountDto);
-  }
-
   @Get()
+  @UseGuards(AccessTokenGuard)
   findAll() {
     return this.accountService.findAll();
   }
@@ -25,11 +21,13 @@ export class AccountController {
   }
 
   @Patch(':id')
+  @UseGuards(AccessTokenGuard)
   update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
     return this.accountService.update(+id, updateAccountDto);
   }
 
   @Delete(':id')
+  @UseGuards(AccessTokenGuard)
   remove(@Param('id') id: string) {
     return this.accountService.remove(+id);
   }
