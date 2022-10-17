@@ -50,32 +50,7 @@ export class AuthService {
             refreshToken,
         };
     }
-
-    async login(account: Account) {
-        const payload = { id: account.id, address: account.address };
-        const [accessToken, refreshToken] = await Promise.all([
-            this.jwtService.signAsync(
-                payload,
-                {
-                    secret: process.env.JWT_ACCESS_SECRET,
-                    expiresIn: '15m',
-                },
-            ),
-            this.jwtService.signAsync(
-                payload,
-                {
-                    secret: process.env.JWT_REFRESH_SECRET,
-                    expiresIn: '7d',
-                },
-            ),
-        ]);
-      
-        return {
-            accessToken,
-            refreshToken,
-        };
-    }
-
+    
     hashData(data: string) {
         return argon2.hash(data);
     }
@@ -83,6 +58,16 @@ export class AuthService {
     async updateRefreshToken(address: string, refreshToken: string) {
         const hashedRefreshToken: string = await this.hashData(refreshToken);
         await this.accountService.updateRefreshToken(address, hashedRefreshToken);
+    }
+
+    async login(account: Account) {
+        const tokens = await this.getTokens(account);
+        await this.updateRefreshToken(account.address, tokens.refreshToken);
+        return tokens;
+    }
+
+    async logout(account: Account) {
+        await this.accountService.updateRefreshToken(account.address, null);
     }
 
     async refreshTokens(address: string, refreshToken: string) {
