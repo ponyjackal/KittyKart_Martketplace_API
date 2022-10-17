@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { utils } from 'ethers';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -14,6 +15,10 @@ export class AccountService {
 
   // find or create an account
   findOne(address: string) {
+    if(!utils.isAddress(address)) {
+      throw new BadRequestException('Not a valid address');
+    }
+    
     return this.prisma.account.upsert({
       where: { address: address.toLowerCase() },
       update: {},
@@ -22,7 +27,7 @@ export class AccountService {
         username: Math.random().toString(36).substr(2, 5),
         nonce: Math.floor(Math.random() * 1000000)
       }
-    });
+    });  
   }
 
   updateNonce(address: string) {
