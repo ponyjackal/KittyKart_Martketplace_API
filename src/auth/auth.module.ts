@@ -4,7 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { AccountModule } from '../account/account.module';
-import { JwtStrategy } from './jwt.strategy';
+import { AccessTokenStrategy } from './accessToken.strategy';
+import { RefreshTokenStrategy } from './refreshToken.strategy';
 import { WalletStrategy } from './wallet.strategy';
 
 @Module({
@@ -16,7 +17,7 @@ import { WalletStrategy } from './wallet.strategy';
       signOptions: { expiresIn: '600s' },
     })
   ],
-  providers: [AuthService, JwtStrategy, WalletStrategy],
+  providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy, WalletStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

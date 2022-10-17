@@ -4,6 +4,7 @@ import { Account } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { AccountService } from '../account/account.service';
 import { Public } from '../app.decorator';
+import { RefreshTokenGuard } from '../auth/refreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
