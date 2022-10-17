@@ -60,7 +60,7 @@ const migrateDatabases = migrationDir => {
   }, {})
   schemaFiles.forEach(file => {
     console.log('Executing: prisma migrate deploy --schema %s ...', file)
-    execSync(`prisma migrate deploy --schema ${file}`, { env: { ...process.env, ...databaseUris  } })
+    execSync(`npx prisma migrate deploy --schema ${file}`, { env: { ...process.env, ...databaseUris  } })
   })
 }
 
