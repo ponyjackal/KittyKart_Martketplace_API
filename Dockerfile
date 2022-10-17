@@ -12,4 +12,4 @@ RUN mkdir ./prisma
 COPY ./prisma ./prisma/
 RUN npx prisma generate
 EXPOSE 3000
-CMD /usr/local/bin/db_migrate -p ./prisma/ && pm2-runtime --raw app.config.js
+CMD yarn migrate && yarn start:prod
