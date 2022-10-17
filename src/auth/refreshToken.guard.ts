@@ -22,12 +22,4 @@ export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
         }
         return super.canActivate(context);
     }
-
-    // handleRequest<TUser = any>(err: any, user: any, info: any, context: ExecutionContext, status?: any): TUser {
-    //     // You can throw an exception based on either "info" or "err" arguments
-    //     if (err || !user) {
-    //         throw err || info;
-    //     }
-    //     return user;
-    // }
 }

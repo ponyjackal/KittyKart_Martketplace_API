@@ -6,6 +6,7 @@ import { AccountService } from '../account/account.service';
 import { Public } from '../app.decorator';
 import { WalletGuard } from './wallet.guard';
 import { RefreshTokenGuard } from './refreshToken.guard';
+import { AccessTokenGuard } from './accessToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,5 +27,20 @@ export class AuthController {
         await this.accountService.updateSignature(account.address, account.signature);
 
         return res.status(HttpStatus.OK).json(token);
+    }
+
+    @UseGuards(AccessTokenGuard)
+    @Post('logout')
+    logout(@Request() req) {
+        const account: Account = req.user;
+        this.authService.logout(account);
+    }
+
+    @UseGuards(RefreshTokenGuard)
+    @Post('refresh')
+    refreshTokens(@Request() req) {
+        const account: Account = req.user;
+        const refreshToken = account.refreshToken;
+        return this.authService.refreshTokens(account.address, refreshToken);
     }
 }
