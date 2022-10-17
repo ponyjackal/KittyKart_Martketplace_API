@@ -39,11 +39,15 @@ export class AccountService {
     });
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return this.prisma.account.update({ where: { id }, data: updateAccountDto });
+  update(address: string, updateAccountDto: UpdateAccountDto) {
+    return this.prisma.account.update({ where: { address: address.toLowerCase() }, data: updateAccountDto });
   }
 
-  remove(id: number) {
-    return this.prisma.account.delete({ where: { id } });
+  updateRefreshToken(address: string, refreshToken: string) {
+    return this.prisma.account.update({ where: { address: address.toLowerCase() }, data: { refreshToken } });
+  }
+
+  remove(address: string) {
+    return this.prisma.account.delete({ where: { address: address.toLowerCase() } });
   }
 }
