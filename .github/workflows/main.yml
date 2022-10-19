@@ -25,10 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - if: github.ref_type == 'tag'
-        run: echo "IMAGE_TAG=$GITHUB_REF_NAME" >> $GITHUB_ENV
+        run: |
+          echo "IMAGE_TAG=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          echo "DEPLOY_DIR=./deploy/prod" >> $GITHUB_ENV
       - if: github.ref_type != 'tag'
         run: |
           echo "IMAGE_TAG=$(cat package.json| grep version | awk '{print $2}' | tr -d '",')-alpha.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+          echo "DEPLOY_DIR=./deploy/dev" >> $GITHUB_ENV
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -66,10 +69,25 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      - name: Deploy App
-        uses: 9vrse/deployer@latest
+      - name: Prepare Deployment
+        uses: yokawasa/action-setup-kube-tools@v0.8.2
         with:
-          build: ${{ github.run_number }}
-          commit: ${{ github.sha }}
-          image: ${{ steps.login-ecr.outputs.registry }}/kittykart-marketplace
-          version: ${{ env.IMAGE_TAG }}
+          setup-tools: |
+            kustomize
+        env:
+          APPLICATION: marketplace
+          BUILD: ${{ github.run_number }}
+          COMMIT: ${{ github.sha }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: kittykart-marketplace
+        run: |
+          cd $DEPLOY_DIR
+          kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          printf > add-build-label.patch.yaml "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: %s\n    app.kubernetes.io/commit: %s\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: %s\n        app.kubernetes.io/commit: %s" $APPLICATION $B
+UILD $COMMIT $BUILD $COMMIT
+          kustomize edit add patch --group apps --kind Deployment --version v1 --path ./add-build-label.patch.yaml
+      - name: Deploy App
+        uses: jarvan1/eks-kubectl-action@main
+        with:
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          args: apply -k $DEPLOY_DIR

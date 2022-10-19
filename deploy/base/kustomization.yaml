@@ -1,0 +1,10 @@
+commonLabels:
+  app.kubernetes.io/part-of: marketplace-api 
+buildMetadata: [managedByLabel]
+resources:
+  - certificate.yaml
+  - configMap.yaml
+  - deployment.yaml
+  - ingress.yaml
+  - service.yaml
+  - serviceAccount.yaml
