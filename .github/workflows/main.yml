@@ -74,6 +74,7 @@ jobs:
         with:
           setup-tools: |
             kustomize
+          kustomize: '4.5.7'
       - name: Prepare Deployment Manifests
         env:
           APPLICATION: marketplace
