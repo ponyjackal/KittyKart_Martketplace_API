@@ -80,9 +80,13 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: kittykart-marketplace
         run: |
+          pwd
           cd $DEPLOY_DIR
+          pwd
+          ls
           kustomize edit set image $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          printf > add-build-label.patch.yaml 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: %s\n    app.kubernetes.io/commit: %s\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: %s\n        app.kubernetes.io/commit: %s' $APPLICATION $GITHUB_RUN_NUMBER $GITHUB_SHA $GITHUB_RUN_NUMBER $GITHUB_SHA
+          printf > add-build-label.patch.yaml 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: %s\n    app.kubernetes.io/commit: %s\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: %s\n        app.kubernetes.io/commit: %s\n' $APPLICATION $GITHUB_RUN_NUMBER $GITHUB_SHA $GITHUB_RUN_NUMBER $GITHUB_SHA
+          ls
           kustomize edit add patch --group apps --kind Deployment --version v1 --path ./add-build-label.patch.yaml
       - name: Deploy App
         uses: jarvan1/eks-kubectl-action@main
