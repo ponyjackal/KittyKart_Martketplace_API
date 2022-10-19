@@ -136,9 +136,14 @@ model Account {
   assets           Asset[]
   listingsAsBuyer  Listing[] @relation(name: "Buyer")
   listingsAsSeller Listing[] @relation(name: "Seller")
-  username         String
-  nonce            Int
-  refreshToken     String?
+}
+
+model Auth {
+  id           Int     @id @default(autoincrement())
+  address      String  @unique
+  username     String
+  nonce        Int
+  refreshToken String?
 }
 
 model Image {

@@ -24,17 +24,8 @@ export class AccountService {
       update: {},
       create: {
         address: address.toLowerCase(),
-        username: Math.random().toString(36).substr(2, 5),
-        nonce: Math.floor(Math.random() * 1000000)
       }
     });  
-  }
-
-  updateNonce(address: string) {
-    return this.prisma.account.update({
-      where: { address: address.toLowerCase() },
-      data: { nonce: Math.floor(Math.random() * 1000000) }
-    });
   }
 
   updateSignature(address: string, signature: string) {
@@ -46,10 +37,6 @@ export class AccountService {
 
   update(address: string, updateAccountDto: UpdateAccountDto) {
     return this.prisma.account.update({ where: { address: address.toLowerCase() }, data: updateAccountDto });
-  }
-
-  updateRefreshToken(address: string, refreshToken: string) {
-    return this.prisma.account.update({ where: { address: address.toLowerCase() }, data: { refreshToken } });
   }
 
   remove(address: string) {
