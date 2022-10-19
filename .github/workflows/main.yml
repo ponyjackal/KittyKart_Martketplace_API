@@ -80,10 +80,12 @@ jobs:
           IMAGE: ${{ steps.login-ecr.outputs.registry }}/kittykart-marketplace
         run: |
           pwd
+          kustomize version
           cd $DEPLOY_DIR
           pwd
           ls
-          kustomize edit set image ${IMAGE}:${IMAGE_TAG}
+          kustomize edit set image "${IMAGE}:${IMAGE_TAG}"
+          echo "edited image to ${IMAGE}:${IMAGE_TAG}"
           printf > add-build-label.patch.yaml 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: %s\n    app.kubernetes.io/commit: %s\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: %s\n        app.kubernetes.io/commit: %s\n' $APPLICATION $GITHUB_RUN_NUMBER $GITHUB_SHA $GITHUB_RUN_NUMBER $GITHUB_SHA
           ls
           kustomize edit add patch --group apps --kind Deployment --version v1 --path ./add-build-label.patch.yaml
