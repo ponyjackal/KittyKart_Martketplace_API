@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Patch, 
+  Param, 
+  Delete, 
+  UseGuards
+} from '@nestjs/common';
 import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { Public } from '../app.decorator';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 
 @Controller('account')
@@ -15,7 +23,7 @@ export class AccountController {
   }
 
   @Get(':address')
-  @Public()
+  @UseGuards(AccessTokenGuard)
   findOne(@Param('address') address: string) {
     return this.accountService.findOne(address);
   }
