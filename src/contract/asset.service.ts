@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { EthersContract, InjectContractProvider, Contract } from 'nestjs-ethers';
-import ABI from './KittyKartGoKart.json';
+import ABI from './abis/KittyKartAsset.json';
 
 @Injectable()
-export class KartService {
+export class AssetService {
     private contract: Contract;
 
     constructor(
         @InjectContractProvider()
         private readonly ethersProvider: EthersContract,
     ) {
-        this.contract = this.ethersProvider.create(process.env.KITTY_KART_GO_KART_ADDRESS, ABI);
+        this.contract = this.ethersProvider.create(process.env.KITTY_KART_ASSET_ADDRESS, ABI);
     }
 
     async transferFrom(from: string, to: string, tokenId: number) {
