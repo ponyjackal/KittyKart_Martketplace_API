@@ -5,8 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AccountModule } from './account/account.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { KartModule } from './kart/kart.module';
-import { AssetModule } from './asset/asset.module';
+import { ContractModule } from './contract/contract.module';
 
 @Module({
   imports: [
@@ -16,7 +15,7 @@ import { AssetModule } from './asset/asset.module';
     AuthModule, 
     AccountModule, 
     PrismaModule, 
-    KartModule, AssetModule
+    ContractModule
   ],
   controllers: [AppController],
   providers: [
