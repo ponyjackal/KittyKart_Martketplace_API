@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { EthersModule } from 'nestjs-ethers';
 import { KartService } from './kart.service';
 import { AssetService } from './asset.service';
+import { MarketplaceService } from './marketplace.service';
 
 @Module({
     imports: [
@@ -14,7 +15,7 @@ import { AssetService } from './asset.service';
         useDefaultProvider: true,
       })
     ],
-    providers: [KartService, AssetService],
-    exports: [KartService, AssetService]
+    providers: [KartService, AssetService, MarketplaceService],
+    exports: [KartService, AssetService, MarketplaceService]
   })
   export class ContractModule {}
