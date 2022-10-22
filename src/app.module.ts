@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { AccountModule } from './account/account.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { KartModule } from './kart/kart.module';
+import { AssetModule } from './asset/asset.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { KartModule } from './kart/kart.module';
     AuthModule, 
     AccountModule, 
     PrismaModule, 
-    KartModule
+    KartModule, AssetModule
   ],
   controllers: [AppController],
   providers: [
