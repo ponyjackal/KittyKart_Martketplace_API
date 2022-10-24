@@ -32,6 +32,7 @@
     "@prisma/client": "^4.4.0",
     "argon2": "^0.30.1",
     "ethers": "^5.7.1",
+    "nestjs-ethers": "^1.0.3",
     "passport": "^0.6.0",
     "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
