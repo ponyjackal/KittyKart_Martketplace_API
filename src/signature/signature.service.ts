@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectSignerProvider, EthersSigner, Wallet } from 'nestjs-ethers';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { MarketplaceService } from '../contract/marketplace.service';
 import { CreateSignatureDto } from './dto/create-signature.dto';
 import { MarketplaceSignatureDto } from './dto/marketplace-signature.dto';
