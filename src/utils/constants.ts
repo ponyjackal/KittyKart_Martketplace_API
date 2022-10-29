@@ -1,3 +1,5 @@
+export const MARKETPLACE_SIGN_DOMAIN = "KittyKartMarketplaceVoucher";
+export const MARKETPLACE_SIGN_VERSION = "1";
 export const MARKETPLACE_SIGN_TYPES = {
     KittyKartMarketplaceVoucher: [
       { name: "user", type: "address" },

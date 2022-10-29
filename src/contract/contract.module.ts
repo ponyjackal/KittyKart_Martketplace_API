@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { EthersModule } from 'nestjs-ethers';
+import { EthersModule, BaseProvider } from 'nestjs-ethers';
 import { KartService } from './kart.service';
 import { AssetService } from './asset.service';
 import { MarketplaceService } from './marketplace.service';

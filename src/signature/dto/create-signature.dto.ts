@@ -3,6 +3,4 @@ export class CreateSignatureDto {
     tokenId: number;
     price: number;
     actionType: number;
-    txSignature: string;
-    ownerSignature: string;
 }

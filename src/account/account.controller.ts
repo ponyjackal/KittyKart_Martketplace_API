@@ -17,7 +17,7 @@ import { Public } from '../app.decorator';
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private accountService: AccountService) {}
 
   @Get()
   @UseGuards(AccessTokenGuard)
