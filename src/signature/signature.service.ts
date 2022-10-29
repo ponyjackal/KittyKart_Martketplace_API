@@ -36,6 +36,14 @@ export class SignatureService {
         const gameServerWallet: Wallet = this.ethersSigner.createWallet(process.env.GAME_SERVER_PRIVATE_KEY);
         const signature = await gameServerWallet._signTypedData(typedDomain, MARKETPLACE_SIGN_TYPES, signData);
 
+        // save signature
+        await this.prisma.account.update({
+            where: { address },
+            data: {
+                signature
+            }
+        })
+
         return { signature};
     }
 }
