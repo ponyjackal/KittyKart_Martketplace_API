@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { OFFER_STATUS } from '@prisma/client';
 import { verifyMessage } from 'nestjs-ethers';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { MarketplaceService } from '../contract/marketplace.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { checksumAddress } from '../utils/checkSumAddress';
