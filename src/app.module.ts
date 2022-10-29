@@ -7,6 +7,7 @@ import { AccountModule } from './account/account.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ContractModule } from './contract/contract.module';
 import { OfferModule } from './offer/offer.module';
+import { SignatureModule } from './signature/signature.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { OfferModule } from './offer/offer.module';
     AuthModule, 
     AccountModule, 
     PrismaModule, 
-    ContractModule, OfferModule
+    ContractModule, OfferModule, SignatureModule
   ],
   controllers: [AppController],
   providers: [
