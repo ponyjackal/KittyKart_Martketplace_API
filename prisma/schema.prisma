@@ -98,7 +98,6 @@ model Listing {
   sold_at            DateTime?
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
-  offers             Offer[]
   seller             Account        @relation(name: "Seller", fields: [seller_address], references: [address])
   buyer              Account?       @relation(name: "Buyer", fields: [buyer_address], references: [address])
   collection         Collection     @relation(fields: [collection_address], references: [address])
@@ -112,16 +111,13 @@ enum OFFER_STATUS {
 
 model Offer {
   id            Int          @id @default(autoincrement())
-  listing_id    String       @unique
   request_from  String
   request_price String
   status        OFFER_STATUS @default(PENDING)
-  requested_at  DateTime
   accepted_at   DateTime?
   rejected_at   DateTime?
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
-  listing       Listing      @relation(fields: [listing_id], references: [listing_id])
   requester     Account      @relation(fields: [request_from], references: [address])
 }
 

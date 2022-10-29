@@ -1,4 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { OFFER_STATUS } from '@prisma/client';
 import { verifyMessage } from 'nestjs-ethers';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MarketplaceService } from '../contract/marketplace.service';
@@ -25,6 +26,17 @@ export class OfferService {
             throw new BadRequestException('Invalid tx signature');
         }
         // create offer
+        await this.prisma.offer.create({
+            data: {
+                requester: {
+                    connect: {
+                        address: address.toLowerCase()
+                    }
+                },
+                request_price: createOfferDto.price,
+                status: OFFER_STATUS.PENDING,
+            }
+        })
     }
 
     findAll() {
