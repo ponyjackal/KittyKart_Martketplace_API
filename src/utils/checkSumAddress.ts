@@ -1,10 +1,9 @@
-
-import { getAddress, verifyMessage } from 'nestjs-ethers';
+import { getAddress } from 'nestjs-ethers';
 
 export const checksumAddress = (address) => {
-    try {
-      return getAddress(address.toLowerCase());
-    } catch {}
-  
-    return address;
+  try {
+    return getAddress(address.toLowerCase());
+  } catch {}
+
+  return address;
 };

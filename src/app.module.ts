@@ -12,16 +12,16 @@ import { SignatureModule } from './signature/signature.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
     }),
-    AuthModule, 
-    AccountModule, 
-    PrismaModule, 
-    ContractModule, OfferModule, SignatureModule
+    AuthModule,
+    AccountModule,
+    PrismaModule,
+    ContractModule,
+    OfferModule,
+    SignatureModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
