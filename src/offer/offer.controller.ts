@@ -10,7 +10,7 @@ import {
 import { Auth } from '@prisma/client';
 import { OfferService } from './offer.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
-import { CreateOfferDto } from './dto/create-offer.dto';
+import { OfferDto } from './dto/offer.dto';
 import { Public } from '../app.decorator';
 import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
 
@@ -20,9 +20,16 @@ export class OfferController {
 
   @Post()
   @UseGuards(AccessTokenGuard)
-  create(@Request() req, @Body() createOfferDto: CreateOfferDto) {
+  create(@Request() req, @Body() offerDto: OfferDto) {
     const auth: Auth = req.user;
-    return this.offerService.create(auth.address, createOfferDto);
+    return this.offerService.create(auth.address, offerDto);
+  }
+
+  @Post('accept')
+  @UseGuards(AccessTokenGuard)
+  accept(@Request() req, @Body() offerDto: OfferDto) {
+    const auth: Auth = req.user;
+    return this.offerService.accept(auth.address, offerDto);
   }
 
   @Get(':collection/:tokenId')

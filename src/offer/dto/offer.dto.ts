@@ -1,4 +1,4 @@
-export class CreateOfferDto {
+export class OfferDto {
   collectionId: number;
   tokenId: number;
   price: string;
