@@ -25,9 +25,18 @@ export class OfferController {
     return this.offerService.create(auth.address, createOfferDto);
   }
 
-  @Get(':collection/:id')
+  @Get(':collection/:tokenId')
   @Public()
-  findAll(@Param('collection') collection: string, @Param('id') id: number) {
-    return this.offerService.findAll(collection, id);
+  findAll(
+    @Param('collection') collection: string,
+    @Param('tokenId') tokenId: string,
+  ) {
+    return this.offerService.findAll(collection, +tokenId);
+  }
+
+  @Get(':id')
+  @Public()
+  findOne(@Param('id') id: string) {
+    return this.offerService.findOne(+id);
   }
 }
