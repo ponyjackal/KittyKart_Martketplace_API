@@ -7,6 +7,6 @@ import { ContractModule } from '../contract/contract.module';
 @Module({
   imports: [PrismaModule, ContractModule],
   providers: [SignatureService],
-  controllers: [SignatureController]
+  controllers: [SignatureController],
 })
 export class SignatureModule {}

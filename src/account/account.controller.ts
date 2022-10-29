@@ -1,13 +1,13 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
+import {
+  Controller,
+  Get,
+  Post,
   Request,
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
-  UseGuards
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { Auth } from '@prisma/client';
 import { AccountService } from './account.service';
