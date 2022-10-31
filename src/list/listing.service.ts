@@ -30,14 +30,11 @@ export class ListingService {
     // create listing
     const listing = await this.prisma.listing.create({
       data: {
-        price: listingDto.price,
-        status: LISTING_STATUS.ACTIVE,
-        collection: {
-          connect: {
-            id: listingDto.collectionId,
-          },
-        },
+        collection_address: listingDto.collectionAddress,
         token_id: listingDto.tokenId,
+        price: listingDto.price,
+        seller_address: listingDto.ownerAddress,
+        status: LISTING_STATUS.ACTIVE,
       },
     });
 
@@ -61,7 +58,7 @@ export class ListingService {
     // update accepted listing
     const collection = await this.prisma.collection.findUnique({
       where: {
-        id: listingDto.collectionId,
+        collectionAddress: listingDto.collectionAddress,
       },
     });
     // update rejected listing
