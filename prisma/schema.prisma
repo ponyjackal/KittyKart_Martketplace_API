@@ -95,7 +95,7 @@ model Listing {
   seller_address     String
   buyer_address      String?
   status             LISTING_STATUS @default(ACTIVE)
-  listed_at          DateTime
+  listed_at          DateTime       @default(now())
   sold_at            DateTime?
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt

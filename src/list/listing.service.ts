@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { OFFER_STATUS } from '@prisma/client';
+import { LISTING_STATUS } from '@prisma/client';
 import { verifyMessage } from 'nestjs-ethers';
 import { PrismaService } from '../prisma/prisma.service';
 import { MarketplaceService } from '../contract/marketplace.service';
@@ -30,13 +30,8 @@ export class ListingService {
     // create listing
     const listing = await this.prisma.listing.create({
       data: {
-        requester: {
-          connect: {
-            address: checksumAddress(address),
-          },
-        },
-        request_price: listingDto.price,
-        status: OFFER_STATUS.PENDING,
+        price: listingDto.price,
+        status: LISTING_STATUS.ACTIVE,
         collection: {
           connect: {
             id: listingDto.collectionId,
@@ -78,7 +73,7 @@ export class ListingService {
         },
       },
       data: {
-        status: OFFER_STATUS.REJECTED,
+        status: LISTING_STATUS.REJECTED,
         rejected_at: new Date(),
       },
     });
@@ -93,7 +88,7 @@ export class ListingService {
         id: listing.id,
       },
       data: {
-        status: OFFER_STATUS.ACCEPTED,
+        status: LISTING_STATUS.ACCEPTED,
         accepted_at: new Date(),
         rejected_at: null,
       },
