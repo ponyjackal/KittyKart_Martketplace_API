@@ -9,16 +9,14 @@ import { RefreshTokenStrategy } from './refreshToken.strategy';
 import { WalletStrategy } from './wallet.strategy';
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({})
-  ],
+  imports: [PassportModule, JwtModule.register({})],
   providers: [
-    AuthService, 
+    AuthService,
     PrismaService,
-    AccessTokenStrategy, 
-    RefreshTokenStrategy, 
-    WalletStrategy],
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
+    WalletStrategy,
+  ],
   controllers: [AuthController],
   exports: [AuthService],
 })

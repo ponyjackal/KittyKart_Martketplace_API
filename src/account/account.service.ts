@@ -2,28 +2,42 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { utils } from 'ethers';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { TablelandService } from '../tableland/tableland.service';
 
 @Injectable()
 export class AccountService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private tableland: TablelandService,
+  ) {}
 
   findAll() {
     return this.prisma.account.findMany();
   }
 
   // find or create an account
-  findOne(address: string) {
+  async findOne(address: string) {
     if (!utils.isAddress(address)) {
       throw new BadRequestException('Not a valid address');
     }
 
-    return this.prisma.account.upsert({
-      where: { address: address.toLowerCase() },
-      update: {},
-      create: {
-        address: address.toLowerCase(),
-      },
-    });
+    const test = await this.tableland.test();
+    console.log('test', test);
+
+    const karts = await this.tableland.getKartsByAddress(address);
+    const assets = await this.tableland.getAssetsByAddress(address);
+
+    return {
+      karts,
+      assets,
+    };
+    // return this.prisma.account.upsert({
+    //   where: { address: address.toLowerCase() },
+    //   update: {},
+    //   create: {
+    //     address: address.toLowerCase(),
+    //   },
+    // });
   }
 
   updateSignature(address: string, signature: string) {
