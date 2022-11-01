@@ -1,12 +1,12 @@
-import { 
-    Controller, 
-    Request, 
-    Get,
-    Post, 
-    Param,
-    Res, 
-    HttpStatus, 
-    UseGuards 
+import {
+  Controller,
+  Request,
+  Get,
+  Post,
+  Param,
+  Res,
+  HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { Auth } from '@prisma/client';
@@ -18,41 +18,38 @@ import { Public } from '../app.decorator';
 
 @Controller('auth')
 export class AuthController {
-    constructor(
-        private authService: AuthService,
-    ) {}
+  constructor(private authService: AuthService) {}
 
-    @Post('login')
-    @UseGuards(WalletGuard)
-    async login(@Request() req, @Res() res: Response){
-        const auth: Auth = req.user;
-        // generate jwt token
-        const token = await this.authService.login(auth);
-        // update nonce
-        await this.authService.updateNonce(auth.address);
+  @Post('login')
+  @UseGuards(WalletGuard)
+  async login(@Request() req, @Res() res: Response) {
+    const auth: Auth = req.user;
+    // generate jwt token
+    const token = await this.authService.login(auth);
+    // update nonce
+    await this.authService.updateNonce(auth.address);
 
-        return res.status(HttpStatus.OK).json(token);
-    }
+    return res.status(HttpStatus.OK).json(token);
+  }
 
-    
-    @Get(':address')
-    @Public()
-    findOne(@Param('address') address: string) {
-        return this.authService.findOne(address);
-    }
+  @Get(':address')
+  @Public()
+  findOne(@Param('address') address: string) {
+    return this.authService.findOne(address);
+  }
 
-    @UseGuards(AccessTokenGuard)
-    @Post('logout')
-    logout(@Request() req) {
-        const auth: Auth = req.user;
-        this.authService.logout(auth.address);
-    }
+  @UseGuards(AccessTokenGuard)
+  @Post('logout')
+  logout(@Request() req) {
+    const auth: Auth = req.user;
+    this.authService.logout(auth.address);
+  }
 
-    @UseGuards(RefreshTokenGuard)
-    @Post('refresh')
-    refreshTokens(@Request() req) {
-        const auth: Auth = req.user;
-        const refreshToken = auth.refreshToken;
-        return this.authService.refreshTokens(auth.address, refreshToken);
-    }
+  @UseGuards(RefreshTokenGuard)
+  @Post('refresh')
+  refreshTokens(@Request() req) {
+    const auth: Auth = req.user;
+    const refreshToken = auth.refreshToken;
+    return this.authService.refreshTokens(auth.address, refreshToken);
+  }
 }

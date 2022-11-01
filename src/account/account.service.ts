@@ -1,12 +1,14 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { utils } from 'ethers';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { TablelandService } from '../tableland/tableland.service';
 
 @Injectable()
 export class AccountService {
   constructor(
-    private prisma: PrismaService
+    private prisma: PrismaService,
+    private tableland: TablelandService,
   ) {}
 
   findAll() {
@@ -14,32 +16,48 @@ export class AccountService {
   }
 
   // find or create an account
-  findOne(address: string) {
-    if(!utils.isAddress(address)) {
+  async findOne(address: string) {
+    if (!utils.isAddress(address)) {
       throw new BadRequestException('Not a valid address');
     }
-    
-    return this.prisma.account.upsert({
+
+    const karts = await this.tableland.getKartsByAddress(address);
+    const assets = await this.tableland.getAssetsByAddress(address);
+
+    const user = await this.prisma.account.upsert({
       where: { address: address.toLowerCase() },
       update: {},
       create: {
         address: address.toLowerCase(),
-      }
-    });  
+      },
+    });
+
+    return {
+      ...user,
+      tokens: {
+        karts: Array.isArray(karts) ? karts : [karts],
+        assets: Array.isArray(assets) ? assets : [assets],
+      },
+    };
   }
 
   updateSignature(address: string, signature: string) {
     return this.prisma.account.update({
       where: { address: address.toLowerCase() },
-      data: { signature }
+      data: { signature },
     });
   }
 
   update(address: string, updateAccountDto: UpdateAccountDto) {
-    return this.prisma.account.update({ where: { address: address.toLowerCase() }, data: updateAccountDto });
+    return this.prisma.account.update({
+      where: { address: address.toLowerCase() },
+      data: updateAccountDto,
+    });
   }
 
   remove(address: string) {
-    return this.prisma.account.delete({ where: { address: address.toLowerCase() } });
+    return this.prisma.account.delete({
+      where: { address: address.toLowerCase() },
+    });
   }
 }

@@ -6,20 +6,20 @@ import { AuthModule } from './auth/auth.module';
 import { AccountModule } from './account/account.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ContractModule } from './contract/contract.module';
+import { TablelandModule } from './tableland/tableland.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
     }),
-    AuthModule, 
-    AccountModule, 
-    PrismaModule, 
-    ContractModule
+    AuthModule,
+    AccountModule,
+    PrismaModule,
+    ContractModule,
+    TablelandModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

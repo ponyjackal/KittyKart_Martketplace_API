@@ -1,4 +1,4 @@
 export class UpdateAccountDto {
-    username: string;
-    refreshToken: string;
+  username: string;
+  refreshToken: string;
 }
