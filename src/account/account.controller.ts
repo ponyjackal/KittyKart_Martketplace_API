@@ -1,16 +1,17 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
-  UseGuards
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
+import { Public } from '../app.decorator';
 
 @Controller('account')
 export class AccountController {
@@ -23,14 +24,17 @@ export class AccountController {
   }
 
   @Get(':address')
-  @UseGuards(AccessTokenGuard)
+  @Public()
   findOne(@Param('address') address: string) {
     return this.accountService.findOne(address);
   }
 
   @Patch(':address')
   @UseGuards(AccessTokenGuard)
-  update(@Param('address') address: string, @Body() updateAccountDto: UpdateAccountDto) {
+  update(
+    @Param('address') address: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
     return this.accountService.update(address, updateAccountDto);
   }
 

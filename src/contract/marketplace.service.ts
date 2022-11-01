@@ -1,31 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { EthersContract, InjectContractProvider, Contract } from 'nestjs-ethers';
+import {
+  EthersContract,
+  InjectContractProvider,
+  Contract,
+} from 'nestjs-ethers';
 import ABI from './abis/KittyKartMarketplace.json';
 
 @Injectable()
 export class MarketplaceService {
-    private contract: Contract;
+  private contract: Contract;
 
-    constructor(
-        @InjectContractProvider()
-        private readonly ethersProvider: EthersContract,
-    ) {
-        this.contract = this.ethersProvider.create(process.env.MARKETPLACE_ADDRESS, ABI);
-    }
+  constructor(
+    @InjectContractProvider()
+    private readonly ethersProvider: EthersContract,
+  ) {
+    this.contract = this.ethersProvider.create(
+      process.env.MARKETPLACE_ADDRESS,
+      ABI,
+    );
+  }
 
-    async list(contractAddress: string, tokenId: number, price: number) {
-        return await this.contract.list(contractAddress, tokenId, price);
-    }
+  async list(contractAddress: string, tokenId: number, price: number) {
+    return await this.contract.list(contractAddress, tokenId, price);
+  }
 
-    async buy(contractAddress: string, tokenId: number, amount: number) {
-        return await this.contract.buy(contractAddress, tokenId, amount);
-    }
+  async buy(contractAddress: string, tokenId: number, amount: number) {
+    return await this.contract.buy(contractAddress, tokenId, amount);
+  }
 
-    async makeOffer(contractAddress: string, tokenId: number, amount: number) {
-        return await this.contract.makeOffer(contractAddress, tokenId, amount);
-    }
+  async makeOffer(contractAddress: string, tokenId: number, amount: number) {
+    return await this.contract.makeOffer(contractAddress, tokenId, amount);
+  }
 
-    async acceptOffer(contractAddress: string, tokenId: number) {
-        return await this.contract.acceptOffer(contractAddress, tokenId);
-    }
+  async acceptOffer(contractAddress: string, tokenId: number) {
+    return await this.contract.acceptOffer(contractAddress, tokenId);
+  }
 }
