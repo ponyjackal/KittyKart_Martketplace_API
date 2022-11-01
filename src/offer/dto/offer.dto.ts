@@ -1,5 +1,5 @@
 export class OfferDto {
-  collectionId: number;
+  collectionAddress: string;
   tokenId: number;
   price: string;
   txSignature: string;

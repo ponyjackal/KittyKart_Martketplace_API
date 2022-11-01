@@ -39,7 +39,7 @@ export class OfferService {
         status: OFFER_STATUS.PENDING,
         collection: {
           connect: {
-            id: offerDto.collectionId,
+            address: offerDto.collectionAddress,
           },
         },
         token_id: offerDto.tokenId,
@@ -66,7 +66,7 @@ export class OfferService {
     // update accepted offer
     const collection = await this.prisma.collection.findUnique({
       where: {
-        id: offerDto.collectionId,
+        address: offerDto.collectionAddress,
       },
     });
     // update rejected offer
