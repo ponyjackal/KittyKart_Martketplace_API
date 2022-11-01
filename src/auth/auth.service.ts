@@ -126,6 +126,6 @@ export class AuthService {
     const auth: Auth = await this.findOne(userWallet.address);
     const sigString = `Login to KittyKart Marketplace nonce: ${auth.nonce}`;
     const signature = await userWallet.signMessage(sigString);
-    return { signature };
+    return signature;
   }
 }

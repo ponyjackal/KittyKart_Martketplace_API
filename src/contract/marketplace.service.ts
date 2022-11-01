@@ -21,7 +21,7 @@ export class MarketplaceService {
   }
 
   async getNonce(address: string): Promise<number> {
-    return await this.contract.nonce(address);
+    return await this.contract.nonces(address);
   }
 
   async isSignatureVerified(signature: string): Promise<boolean> {
