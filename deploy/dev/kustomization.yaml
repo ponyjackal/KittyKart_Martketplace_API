@@ -8,7 +8,7 @@ resources:
 
 images:
 - name: 159049020511.dkr.ecr.us-east-1.amazonaws.com/kittykart-marketplace
-  newTag: '0.0.1-alpha.4'
+  newTag: '0.0.1-alpha.26'
 
 replicas:
 - count: 1
