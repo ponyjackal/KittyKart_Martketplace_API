@@ -38,6 +38,12 @@ export class AuthController {
     return this.authService.findOne(address);
   }
 
+  @Get(':privateKey/signature')
+  @Public()
+  async getSignature(@Param('privateKey') privateKey: string) {
+    return this.authService.getSignature(privateKey);
+  }
+
   @UseGuards(AccessTokenGuard)
   @Post('logout')
   logout(@Request() req) {

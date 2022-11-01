@@ -120,4 +120,12 @@ export class AuthService {
     await this.updateRefreshToken(auth.address, tokens.refreshToken);
     return tokens;
   }
+
+  async getSignature(privateKey: string) {
+    const userWallet = new ethers.Wallet(privateKey);
+    const auth: Auth = await this.findOne(userWallet.address);
+    const sigString = `Login to KittyKart Marketplace nonce: ${auth.nonce}`;
+    const signature = await userWallet.signMessage(sigString);
+    return { signature };
+  }
 }
