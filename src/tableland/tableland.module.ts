@@ -10,10 +10,8 @@ import { TablelandService } from './tableland.service';
       provide: 'TABLELAND_CONNECTION',
       useFactory: async (ethersSigner: EthersSigner) => {
         const gameServerWallet: Wallet = ethersSigner.createWallet(
-          process.env.GAME_SERVER_PRIVATE_KEY,
+          process.env.GAME_SERVER_WALLET_PRIVATE,
         );
-
-        console.log('gameServerWallet', gameServerWallet);
 
         const tbl = await connect({
           signer: gameServerWallet,
@@ -23,6 +21,7 @@ import { TablelandService } from './tableland.service';
 
         return tbl;
       },
+      inject: [EthersSigner],
     },
   ],
   exports: [TablelandService],
