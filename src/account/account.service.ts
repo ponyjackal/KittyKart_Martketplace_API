@@ -24,17 +24,21 @@ export class AccountService {
     const karts = await this.tableland.getKartsByAddress(address);
     const assets = await this.tableland.getAssetsByAddress(address);
 
+    const user = await this.prisma.account.upsert({
+      where: { address: address.toLowerCase() },
+      update: {},
+      create: {
+        address: address.toLowerCase(),
+      },
+    });
+
     return {
-      karts,
-      assets,
+      ...user,
+      tokens: {
+        karts: Array.isArray(karts) ? karts : [karts],
+        assets: Array.isArray(assets) ? assets : [assets],
+      },
     };
-    // return this.prisma.account.upsert({
-    //   where: { address: address.toLowerCase() },
-    //   update: {},
-    //   create: {
-    //     address: address.toLowerCase(),
-    //   },
-    // });
   }
 
   updateSignature(address: string, signature: string) {
