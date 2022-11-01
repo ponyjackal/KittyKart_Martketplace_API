@@ -26,7 +26,6 @@ export class AccountController {
   @Get(':address')
   @Public()
   findOne(@Param('address') address: string) {
-    return 'a';
     return this.accountService.findOne(address);
   }
 

@@ -21,9 +21,6 @@ export class AccountService {
       throw new BadRequestException('Not a valid address');
     }
 
-    const test = await this.tableland.test();
-    console.log('test', test);
-
     const karts = await this.tableland.getKartsByAddress(address);
     const assets = await this.tableland.getAssetsByAddress(address);
 

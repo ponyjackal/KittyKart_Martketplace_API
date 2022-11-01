@@ -38,8 +38,4 @@ export class TablelandService {
     console.log('assets', result);
     return result;
   }
-
-  async test() {
-    return 'test';
-  }
 }
