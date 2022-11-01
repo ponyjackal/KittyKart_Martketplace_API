@@ -38,7 +38,7 @@ export class SignatureService {
     };
 
     const gameServerWallet: Wallet = this.ethersSigner.createWallet(
-      process.env.GAME_SERVER_PRIVATE_KEY,
+      process.env.GAME_SERVER_WALLET_PRIVATE,
     );
     const signature = await gameServerWallet._signTypedData(
       typedDomain,
@@ -47,12 +47,12 @@ export class SignatureService {
     );
 
     // save signature
-    await this.prisma.account.update({
-      where: { address },
-      data: {
-        signature,
-      },
-    });
+    // await this.prisma.account.update({
+    //   where: { address },
+    //   data: {
+    //     signature,
+    //   },
+    // });
 
     return { signature };
   }
