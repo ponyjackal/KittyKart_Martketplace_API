@@ -11,16 +11,15 @@ import { TablelandModule } from './tableland/tableland.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
     }),
-    AuthModule, 
-    AccountModule, 
-    PrismaModule, 
-    ContractModule, TablelandModule
+    AuthModule,
+    AccountModule,
+    PrismaModule,
+    ContractModule,
+    TablelandModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

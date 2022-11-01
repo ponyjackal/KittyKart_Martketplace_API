@@ -13,6 +13,8 @@ import { TablelandService } from './tableland.service';
           process.env.GAME_SERVER_PRIVATE_KEY,
         );
 
+        console.log('gameServerWallet', gameServerWallet);
+
         const tbl = await connect({
           signer: gameServerWallet,
           network: 'testnet',

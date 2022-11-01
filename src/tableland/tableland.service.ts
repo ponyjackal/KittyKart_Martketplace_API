@@ -20,6 +20,7 @@ export class TablelandService {
       }.owner='${address.toLowerCase()}' GROUP BY id;`,
     );
 
+    console.log('karts', result);
     return result;
   }
 
@@ -34,6 +35,11 @@ export class TablelandService {
       }.owner='${address.toLowerCase()}' GROUP BY id;`,
     );
 
+    console.log('assets', result);
     return result;
+  }
+
+  async test() {
+    return 'test';
   }
 }
