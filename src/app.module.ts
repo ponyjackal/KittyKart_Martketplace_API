@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { AccountModule } from './account/account.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ContractModule } from './contract/contract.module';
+import { TablelandModule } from './tableland/tableland.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { ContractModule } from './contract/contract.module';
     AuthModule, 
     AccountModule, 
     PrismaModule, 
-    ContractModule
+    ContractModule, TablelandModule
   ],
   controllers: [AppController],
   providers: [
