@@ -27,4 +27,20 @@ export class MarketplaceService {
   async isSignatureVerified(signature: string): Promise<boolean> {
     return await this.contract.signatures(signature);
   }
+
+  async list(contractAddress: string, tokenId: number, price: number) {
+    return await this.contract.list(contractAddress, tokenId, price);
+  }
+
+  async buy(contractAddress: string, tokenId: number, amount: number) {
+    return await this.contract.buy(contractAddress, tokenId, amount);
+  }
+
+  async makeOffer(contractAddress: string, tokenId: number, amount: number) {
+    return await this.contract.makeOffer(contractAddress, tokenId, amount);
+  }
+
+  async acceptOffer(contractAddress: string, tokenId: number) {
+    return await this.contract.acceptOffer(contractAddress, tokenId);
+  }
 }

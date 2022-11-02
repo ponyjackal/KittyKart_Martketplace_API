@@ -33,9 +33,11 @@ export class AccountController {
 
   @Patch()
   @UseGuards(AccessTokenGuard)
-  update(@Request() req, @Body() updateAccountDto: UpdateAccountDto) {
-    const auth: Account = req.user;
-    return this.accountService.update(auth.address, updateAccountDto);
+  update(
+    @Param('address') address: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
+    return this.accountService.update(address, updateAccountDto);
   }
 
   @Delete()

@@ -8,7 +8,7 @@ COPY tsconfig.json ./
 COPY package*.json ./
 RUN chmod 755 /usr/local/bin/db_migrate && npm install
 COPY ./dist ./
-RUN mkdir ./prisma
+RUN mkdir -p prisma
 COPY ./prisma ./prisma/
 RUN npx prisma generate
 EXPOSE 3000
