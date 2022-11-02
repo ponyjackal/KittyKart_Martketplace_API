@@ -16,17 +16,20 @@ export class ListingService {
   async create(address: string, listingDto: ListingDto) {
     // validate user address and signature
     const nonce = await this.marketplaceService.getNonce(address);
-    const message = process.env.MESSAGE + (nonce - 1);
-    const derivedAddress = verifyMessage(message, listingDto.ownerSignature);
-    if (checksumAddress(derivedAddress) !== checksumAddress(address)) {
-      throw new BadRequestException('Invalid user signature');
-    }
+    // const message = process.env.MESSAGE + (nonce - 1);
+    // const derivedAddress = verifyMessage(message, listingDto.ownerSignature);
+
+    // console.log('derivedAddress', derivedAddress);
+    // if (checksumAddress(derivedAddress) !== checksumAddress(address)) {
+    //   throw new BadRequestException('Invalid user signature');
+    // }
     // validate typed signature
-    const isSignatureVerified =
-      await this.marketplaceService.isSignatureVerified(listingDto.txSignature);
-    if (!isSignatureVerified) {
-      throw new BadRequestException('Invalid tx signature');
-    }
+    // const isSignatureVerified =
+    //   await this.marketplaceService.isSignatureVerified(listingDto.txSignature);
+    // if (!isSignatureVerified) {
+    //   throw new BadRequestException('Invalid tx signature');
+    // }
+
     // create listing
     const listing = await this.prisma.listing.create({
       data: {
