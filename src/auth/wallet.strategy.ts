@@ -1,7 +1,7 @@
 import { Strategy } from 'passport-custom';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Auth } from '@prisma/client';
+import { Account } from '@prisma/client';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class WalletStrategy extends PassportStrategy(Strategy, 'wallet') {
     super();
   }
 
-  async validate(req): Promise<Auth> {
+  async validate(req): Promise<Account> {
     const { address, signature } = req.body;
     const auth = await this.authService.validateAuth(address, signature);
     if (auth) {

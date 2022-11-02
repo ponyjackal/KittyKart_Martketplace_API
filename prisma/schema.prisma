@@ -13,8 +13,8 @@ datasource db {
 model Collection {
   id         Int       @id @default(autoincrement())
   address    String    @unique
-  name       String
-  symbol     String
+  name       String    @unique
+  symbol     String    @unique
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   karts      Kart[]
@@ -128,6 +128,9 @@ model Account {
   id               Int       @id @default(autoincrement())
   address          String    @unique
   signature        String?   @unique
+  username         String
+  nonce            Int
+  refreshToken     String?
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
   offers           Offer[]
@@ -135,14 +138,6 @@ model Account {
   assets           Asset[]
   listingsAsBuyer  Listing[] @relation(name: "Buyer")
   listingsAsSeller Listing[] @relation(name: "Seller")
-}
-
-model Auth {
-  id           Int     @id @default(autoincrement())
-  address      String  @unique
-  username     String
-  nonce        Int
-  refreshToken String?
 }
 
 model KartImage {
