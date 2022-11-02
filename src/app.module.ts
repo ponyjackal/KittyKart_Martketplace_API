@@ -10,6 +10,7 @@ import { OfferModule } from './offer/offer.module';
 import { ListingModule } from './listing/listing.module';
 import { CollectionModule } from './collection/collection.module';
 import { SignatureModule } from './signature/signature.module';
+import { TablelandModule } from './tableland/tableland.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SignatureModule } from './signature/signature.module';
     ListingModule,
     SignatureModule,
     CollectionModule,
+    TablelandModule,
   ],
   controllers: [AppController],
   providers: [AppService],

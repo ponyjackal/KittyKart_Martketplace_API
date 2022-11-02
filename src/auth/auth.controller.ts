@@ -42,9 +42,7 @@ export class AuthController {
   @Public()
   async getSignature(@Request() req, @Res() res: Response) {
     const privateKey = req.body.privateKey;
-    console.log('privateKey => ', privateKey);
     const signature = await this.authService.getSignature(privateKey);
-    console.log('signature', signature);
     return res.status(HttpStatus.OK).json({ signature });
   }
 
