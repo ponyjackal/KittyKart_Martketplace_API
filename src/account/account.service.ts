@@ -17,12 +17,8 @@ export class AccountService {
       throw new BadRequestException('Not a valid address');
     }
 
-    return this.prisma.account.upsert({
+    return this.prisma.account.findFirst({
       where: { address: address.toLowerCase() },
-      update: {},
-      create: {
-        address: address.toLowerCase(),
-      },
     });
   }
 

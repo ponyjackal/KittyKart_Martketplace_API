@@ -9,7 +9,7 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { Auth } from '@prisma/client';
+import { Account } from '@prisma/client';
 import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
@@ -34,14 +34,14 @@ export class AccountController {
   @Patch()
   @UseGuards(AccessTokenGuard)
   update(@Request() req, @Body() updateAccountDto: UpdateAccountDto) {
-    const auth: Auth = req.user;
+    const auth: Account = req.user;
     return this.accountService.update(auth.address, updateAccountDto);
   }
 
   @Delete()
   @UseGuards(AccessTokenGuard)
   remove(@Request() req) {
-    const auth: Auth = req.user;
+    const auth: Account = req.user;
     return this.accountService.remove(auth.address);
   }
 }

@@ -1,5 +1,12 @@
-import { Controller, Post, Request, Body, UseGuards } from '@nestjs/common';
-import { Auth } from '@prisma/client';
+import {
+  Controller,
+  Post,
+  Request,
+  Body,
+  UseGuards,
+  Get,
+} from '@nestjs/common';
+import { Account } from '@prisma/client';
 import { ListingService } from './listing.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { ListingDto } from './dto/listing.dto';
@@ -10,7 +17,12 @@ export class ListingController {
   @Post()
   @UseGuards(AccessTokenGuard)
   create(@Request() req, @Body() listingDto: ListingDto) {
-    const auth: Auth = req.user;
+    const auth: Account = req.user;
     return this.listingService.create(auth.address, listingDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.listingService.findAll();
   }
 }
