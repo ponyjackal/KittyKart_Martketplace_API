@@ -10,4 +10,4 @@ import { ContractModule } from '../contract/contract.module';
   controllers: [ListingController],
   exports: [ListingService],
 })
-export class ListModule {}
+export class ListingModule {}
