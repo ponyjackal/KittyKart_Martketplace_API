@@ -10,6 +10,7 @@ import { ethers } from 'ethers';
 import * as argon2 from 'argon2';
 import { hashMessage } from 'ethers/lib/utils';
 import { PrismaService } from '../prisma/prisma.service';
+import { checksumAddress } from 'src/utils/checkSumAddress';
 
 @Injectable()
 export class AuthService {
@@ -22,20 +23,29 @@ export class AuthService {
 
     return this.prisma.auth.upsert({
       where: {
-        address: address.toLowerCase(),
+        address: checksumAddress(address),
       },
       update: {},
       create: {
-        address: address.toLowerCase(),
         username: Math.random().toString(36).substr(2, 5),
         nonce: Math.floor(Math.random() * 1000000),
+        account: {
+          connectOrCreate: {
+            where: {
+              address: checksumAddress(address),
+            },
+            create: {
+              address: checksumAddress(address),
+            },
+          },
+        },
       },
     });
   }
 
   updateNonce(address: string) {
     return this.prisma.auth.update({
-      where: { address: address.toLowerCase() },
+      where: { address: checksumAddress(address) },
       data: { nonce: Math.floor(Math.random() * 1000000) },
     });
   }
@@ -44,7 +54,7 @@ export class AuthService {
     const auth: Auth = await this.findOne(address);
 
     const signer = ethers.utils.recoverAddress(
-      hashMessage(`Login to KittyKart Marketplace nonce: ${auth.nonce}`),
+      hashMessage(process.env.WALLET_SIGN_MESSAGE),
       signature,
     );
 
@@ -82,7 +92,7 @@ export class AuthService {
     const hashedRefreshToken: string = await this.hashData(refreshToken);
     await this.prisma.auth.update({
       where: {
-        address: address.toLowerCase(),
+        address: checksumAddress(address),
       },
       data: {
         refreshToken: hashedRefreshToken,
@@ -99,7 +109,7 @@ export class AuthService {
   async logout(address: string) {
     await this.prisma.auth.update({
       where: {
-        address: address.toLowerCase(),
+        address: checksumAddress(address),
       },
       data: {
         refreshToken: null,
@@ -119,5 +129,12 @@ export class AuthService {
     const tokens = await this.getTokens(auth);
     await this.updateRefreshToken(auth.address, tokens.refreshToken);
     return tokens;
+  }
+
+  async getSignature(privateKey: string) {
+    const userWallet = new ethers.Wallet(privateKey);
+    const sigString = process.env.WALLET_SIGN_MESSAGE;
+    const signature = await userWallet.signMessage(sigString);
+    return signature;
   }
 }
