@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { Account } from '@prisma/client';
+import { Auth } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { WalletGuard } from './wallet.guard';
 import { RefreshTokenGuard } from './refreshToken.guard';
@@ -23,7 +23,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(WalletGuard)
   async login(@Request() req, @Res() res: Response) {
-    const auth: Account = req.user;
+    const auth: Auth = req.user;
     // generate jwt token
     const token = await this.authService.login(auth);
     // update nonce
@@ -49,14 +49,14 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Post('logout')
   logout(@Request() req) {
-    const auth: Account = req.user;
+    const auth: Auth = req.user;
     this.authService.logout(auth.address);
   }
 
   @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   refreshTokens(@Request() req) {
-    const auth: Account = req.user;
+    const auth: Auth = req.user;
     const refreshToken = auth.refreshToken;
     return this.authService.refreshTokens(auth.address, refreshToken);
   }

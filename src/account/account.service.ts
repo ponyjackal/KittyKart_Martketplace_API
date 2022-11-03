@@ -28,8 +28,6 @@ export class AccountService {
       where: { address: address.toLowerCase() },
       update: {},
       create: {
-        username: '',
-        nonce: 0,
         address: address.toLowerCase(),
       },
     });

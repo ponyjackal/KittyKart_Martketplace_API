@@ -7,7 +7,7 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { Account } from '@prisma/client';
+import { Auth } from '@prisma/client';
 import { OfferService } from './offer.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { OfferDto } from './dto/offer.dto';
@@ -21,14 +21,14 @@ export class OfferController {
   @Post()
   @UseGuards(AccessTokenGuard)
   create(@Request() req, @Body() offerDto: OfferDto) {
-    const auth: Account = req.user;
+    const auth: Auth = req.user;
     return this.offerService.create(auth.address, offerDto);
   }
 
   @Post('accept')
   @UseGuards(AccessTokenGuard)
   accept(@Request() req, @Body() offerDto: OfferDto) {
-    const auth: Account = req.user;
+    const auth: Auth = req.user;
     return this.offerService.accept(auth.address, offerDto);
   }
 

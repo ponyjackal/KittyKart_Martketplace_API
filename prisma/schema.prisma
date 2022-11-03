@@ -128,9 +128,6 @@ model Account {
   id               Int       @id @default(autoincrement())
   address          String    @unique
   signature        String?   @unique
-  username         String
-  nonce            Int
-  refreshToken     String?
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
   offers           Offer[]
@@ -138,6 +135,16 @@ model Account {
   assets           Asset[]
   listingsAsBuyer  Listing[] @relation(name: "Buyer")
   listingsAsSeller Listing[] @relation(name: "Seller")
+  Auth             Auth?
+}
+
+model Auth {
+  id           Int     @id @default(autoincrement())
+  address      String  @unique
+  username     String
+  nonce        Int
+  refreshToken String?
+  account      Account @relation(fields: [address], references: [address])
 }
 
 model KartImage {
