@@ -54,7 +54,7 @@ export class AuthService {
     const auth: Auth = await this.findOne(address);
 
     const signer = ethers.utils.recoverAddress(
-      hashMessage(`Login to KittyKart Marketplace nonce: ${auth.nonce}`),
+      hashMessage(process.env.WALLET_SIGN_MESSAGE),
       signature,
     );
 
@@ -133,8 +133,7 @@ export class AuthService {
 
   async getSignature(privateKey: string) {
     const userWallet = new ethers.Wallet(privateKey);
-    const auth: Auth = await this.findOne(userWallet.address);
-    const sigString = `Login to KittyKart Marketplace nonce: ${auth.nonce}`;
+    const sigString = process.env.WALLET_SIGN_MESSAGE;
     const signature = await userWallet.signMessage(sigString);
     return signature;
   }

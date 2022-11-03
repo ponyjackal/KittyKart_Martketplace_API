@@ -12,7 +12,6 @@ import { OfferService } from './offer.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { OfferDto } from './dto/offer.dto';
 import { Public } from '../app.decorator';
-import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
 
 @Controller('offer')
 export class OfferController {
@@ -22,7 +21,7 @@ export class OfferController {
   @UseGuards(AccessTokenGuard)
   create(@Request() req, @Body() offerDto: OfferDto) {
     const auth: Auth = req.user;
-    return this.offerService.create(auth.address, offerDto);
+    return this.offerService.create(auth, offerDto);
   }
 
   @Post('accept')
@@ -32,13 +31,19 @@ export class OfferController {
     return this.offerService.accept(auth.address, offerDto);
   }
 
+  @Get()
+  @Public()
+  findAll() {
+    return this.offerService.findAll();
+  }
+
   @Get(':collection/:tokenId')
   @Public()
-  findAll(
+  findOffers(
     @Param('collection') collection: string,
     @Param('tokenId') tokenId: string,
   ) {
-    return this.offerService.findAll(collection, +tokenId);
+    return this.offerService.findOffers(collection, +tokenId);
   }
 
   @Get(':id')

@@ -47,12 +47,12 @@ export class SignatureService {
     );
 
     // save signature
-    // await this.prisma.account.update({
-    //   where: { address },
-    //   data: {
-    //     signature,
-    //   },
-    // });
+    await this.prisma.account.update({
+      where: { address },
+      data: {
+        signature,
+      },
+    });
 
     return { signature };
   }

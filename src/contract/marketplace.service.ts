@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import {
   EthersContract,
   InjectContractProvider,
@@ -25,7 +25,11 @@ export class MarketplaceService {
   }
 
   async isSignatureVerified(signature: string): Promise<boolean> {
-    return await this.contract.signatures(signature);
+    try {
+      return await this.contract.signatures(signature);
+    } catch (error) {
+      throw new BadRequestException('Invalid tx signature');
+    }
   }
 
   async list(contractAddress: string, tokenId: number, price: number) {

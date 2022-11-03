@@ -1,13 +1,15 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { checksumAddress } from 'src/utils/checkSumAddress';
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-access',
 ) {
-  constructor() {
+  constructor(private prisma: PrismaService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -16,7 +18,13 @@ export class AccessTokenStrategy extends PassportStrategy(
   }
 
   async validate(payload: any) {
-    const account = { ...payload };
+    const authUser = await this.prisma.auth.findFirst({
+      where: {
+        address: checksumAddress(payload.address),
+      },
+    });
+
+    const account = { ...authUser };
     return account;
   }
 }

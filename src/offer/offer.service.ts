@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { OFFER_STATUS } from '@prisma/client';
+import { Auth, OFFER_STATUS } from '@prisma/client';
 import { verifyMessage } from 'nestjs-ethers';
 import { PrismaService } from '../prisma/prisma.service';
 import { MarketplaceService } from '../contract/marketplace.service';
@@ -13,12 +13,11 @@ export class OfferService {
     private marketplaceService: MarketplaceService,
   ) {}
 
-  async create(address: string, offerDto: OfferDto) {
+  async create(authUser: Auth, offerDto: OfferDto) {
     // validate user address and signature
-    const nonce = await this.marketplaceService.getNonce(address);
-    const message = process.env.MESSAGE + (nonce - 1);
+    const message = process.env.WALLET_SIGN_MESSAGE;
     const derivedAddress = verifyMessage(message, offerDto.ownerSignature);
-    if (checksumAddress(derivedAddress) !== checksumAddress(address)) {
+    if (checksumAddress(derivedAddress) !== checksumAddress(authUser.address)) {
       throw new BadRequestException('Invalid user signature');
     }
     // validate typed signature
@@ -32,7 +31,7 @@ export class OfferService {
       data: {
         requester: {
           connect: {
-            address: checksumAddress(address),
+            address: checksumAddress(authUser.address),
           },
         },
         request_price: offerDto.price,
@@ -51,8 +50,7 @@ export class OfferService {
 
   async accept(address: string, offerDto: OfferDto) {
     // validate user address and signature
-    const nonce = await this.marketplaceService.getNonce(address);
-    const message = process.env.MESSAGE + (nonce - 1);
+    const message = process.env.WALLET_SIGN_MESSAGE;
     const derivedAddress = verifyMessage(message, offerDto.ownerSignature);
     if (checksumAddress(derivedAddress) !== checksumAddress(address)) {
       throw new BadRequestException('Invalid user signature');
@@ -103,13 +101,17 @@ export class OfferService {
     return offer;
   }
 
-  findAll(collection: string, id: number) {
+  findOffers(collection: string, id: number) {
     return this.prisma.offer.findMany({
       where: {
         collection_address: checksumAddress(collection),
         token_id: id,
       },
     });
+  }
+
+  findAll() {
+    return this.prisma.offer.findMany({});
   }
 
   findOne(id: number) {
