@@ -13,13 +13,14 @@ datasource db {
 model Collection {
   id         Int       @id @default(autoincrement())
   address    String    @unique
-  name       String
-  symbol     String
+  name       String    @unique
+  symbol     String    @unique
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   karts      Kart[]
   assets     Asset[]
   listings   Listing[]
+  Offer      Offer[]
 }
 
 model Kart {
@@ -87,18 +88,16 @@ enum LISTING_STATUS {
 
 model Listing {
   id                 Int            @id @default(autoincrement())
-  listing_id         String         @unique
   collection_address String
   token_id           Int
   price              String
   seller_address     String
   buyer_address      String?
   status             LISTING_STATUS @default(ACTIVE)
-  listed_at          DateTime
+  listed_at          DateTime       @default(now())
   sold_at            DateTime?
   created_at         DateTime       @default(now())
   updated_at         DateTime       @updatedAt
-  offers             Offer[]
   seller             Account        @relation(name: "Seller", fields: [seller_address], references: [address])
   buyer              Account?       @relation(name: "Buyer", fields: [buyer_address], references: [address])
   collection         Collection     @relation(fields: [collection_address], references: [address])
@@ -111,18 +110,18 @@ enum OFFER_STATUS {
 }
 
 model Offer {
-  id            Int          @id @default(autoincrement())
-  listing_id    String       @unique
-  request_from  String
-  request_price String
-  status        OFFER_STATUS @default(PENDING)
-  requested_at  DateTime
-  accepted_at   DateTime?
-  rejected_at   DateTime?
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
-  listing       Listing      @relation(fields: [listing_id], references: [listing_id])
-  requester     Account      @relation(fields: [request_from], references: [address])
+  id                 Int          @id @default(autoincrement())
+  collection_address String
+  collection         Collection   @relation(fields: [collection_address], references: [address])
+  token_id           Int
+  request_from       String
+  request_price      String
+  status             OFFER_STATUS @default(PENDING)
+  accepted_at        DateTime?
+  rejected_at        DateTime?
+  created_at         DateTime     @default(now())
+  updated_at         DateTime     @updatedAt
+  requester          Account      @relation(fields: [request_from], references: [address])
 }
 
 model Account {
@@ -136,6 +135,7 @@ model Account {
   assets           Asset[]
   listingsAsBuyer  Listing[] @relation(name: "Buyer")
   listingsAsSeller Listing[] @relation(name: "Seller")
+  Auth             Auth?
 }
 
 model Auth {
@@ -144,24 +144,23 @@ model Auth {
   username     String
   nonce        Int
   refreshToken String?
+  account      Account @relation(fields: [address], references: [address])
 }
 
-model Image {
-  id              Int              @id @default(autoincrement())
-  image_url       String
-  animation_url   String
-  created_at      DateTime         @default(now())
-  updated_at      DateTime         @updatedAt
-  imageAttributes ImageAttribute[]
+model KartImage {
+  id            Int      @id @default(autoincrement())
+  image_url     String
+  animation_url String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  traits        Json     @unique
 }
 
-model ImageAttribute {
-  id           Int      @id @default(autoincrement())
-  image_id     Int
-  trait_type   String
-  value        String
-  display_type String
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-  image        Image    @relation(fields: [image_id], references: [id])
+model AssetImage {
+  id            Int      @id @default(autoincrement())
+  image_url     String
+  animation_url String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  traits        Json     @unique
 }

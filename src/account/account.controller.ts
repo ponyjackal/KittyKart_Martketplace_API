@@ -2,12 +2,14 @@ import {
   Controller,
   Get,
   Post,
+  Request,
   Body,
   Patch,
   Param,
   Delete,
   UseGuards,
 } from '@nestjs/common';
+import { Account } from '@prisma/client';
 import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
@@ -15,7 +17,7 @@ import { Public } from '../app.decorator';
 
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(private accountService: AccountService) {}
 
   @Get()
   @UseGuards(AccessTokenGuard)
@@ -29,7 +31,7 @@ export class AccountController {
     return this.accountService.findOne(address);
   }
 
-  @Patch(':address')
+  @Patch()
   @UseGuards(AccessTokenGuard)
   update(
     @Param('address') address: string,
@@ -38,9 +40,10 @@ export class AccountController {
     return this.accountService.update(address, updateAccountDto);
   }
 
-  @Delete(':address')
+  @Delete()
   @UseGuards(AccessTokenGuard)
-  remove(@Param('address') address: string) {
-    return this.accountService.remove(address);
+  remove(@Request() req) {
+    const auth: Account = req.user;
+    return this.accountService.remove(auth.address);
   }
 }
