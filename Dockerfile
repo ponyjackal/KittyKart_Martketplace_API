@@ -12,4 +12,4 @@ RUN mkdir -p prisma
 COPY ./prisma ./prisma/
 RUN npx prisma generate
 EXPOSE 3000
-CMD yarn migrate && yarn start:prod
+CMD yarn migrate && yarn start:dev
