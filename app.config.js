@@ -63,7 +63,8 @@ const databaseUris = getAllFiles(process.cwd())
 export const apps = [
   {
     name: 'api',
-    script: 'main.js',
+    script: 'yarn',
+    args: 'start',
     error_file: '/dev/stderr',
     out_file: '/dev/stdout',
     env: {
