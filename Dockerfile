@@ -6,8 +6,8 @@ COPY db_migrate /usr/local/bin/
 COPY app.config.js ./
 COPY tsconfig.json ./
 COPY package*.json ./
-RUN chmod 755 /usr/local/bin/db_migrate && npm install
-COPY ./dist ./
+RUN chmod 755 /usr/local/bin/db_migrate && npm install && mkdir /app/dist
+COPY ./dist ./dist/
 RUN mkdir -p prisma
 COPY ./prisma ./prisma/
 RUN npx prisma generate
