@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { InjectSignerProvider, EthersSigner, Wallet } from 'nestjs-ethers';
-import { connect, NetworkName, ChainName } from '@tableland/sdk';
+import { EthersSigner, Wallet } from 'nestjs-ethers';
+import { connect } from '@tableland/sdk';
 import { TablelandService } from './tableland.service';
 
 @Module({
