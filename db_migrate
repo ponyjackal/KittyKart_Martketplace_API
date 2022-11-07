@@ -40,14 +40,21 @@ const extractDbNameUrl = (file) => {
 
 // works for local development
 const defaultDbBaseUri = () => {
-  if (process.env.DRONE) {
-    return 'postgres://postgres:postgres@database:5432'
+  if (fs.existsSync(".env")) {
+    require('dotenv').config()
+    return process.env.DB_BASE_URI
+  } else {
+    try {
+      const port = execSync(
+        'docker port $(docker ps | grep -E "(testdb|database|postgres)" | awk \'{print $1}\') | cut -d: -f2'
+        )
+      const uri = 'postgres://postgres:postgres@localhost:'.concat(port)
+      return uri.trim();
+    } catch (err) {
+      console.log(err)
+      return 'postgres://postgres:postgres@database:5432'
+    }
   }
-  const port = execSync(
-    'docker port $(docker ps | grep -E "(testdb|database|postgres)" | awk \'{print $1}\') | cut -d: -f2'
-  )
-  const uri = 'postgres://postgres:postgres@localhost:'.concat(port)
-  return uri.trim()
 }
 
 const migrateDatabases = migrationDir => {
