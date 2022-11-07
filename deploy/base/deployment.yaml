@@ -14,7 +14,7 @@ spec:
         vault.hashicorp.com/agent-pre-populate-only: 'true'
         vault.hashicorp.com/ca-cert: '/vault/tls/ca.crt'
         vault.hashicorp.com/tls-secret: 'vault-tls-client'
-        vault.hashicorp.com/role: 'adminsvc'
+        vault.hashicorp.com/role: 'marketplacesvc'
         vault.hashicorp.com/agent-inject-secret-env: 'kv/data/marketplacesvc'
         vault.hashicorp.com/secret-volume-path-env: '/app'
         vault.hashicorp.com/agent-inject-file-env: '.env'
