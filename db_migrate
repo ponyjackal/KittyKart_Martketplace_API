@@ -44,7 +44,7 @@ const defaultDbBaseUri = () => {
     require('dotenv').config()
     return process.env.DB_BASE_URI
   } else if (fs.existsSync("/vault/secrets/env")) {
-    require('dotenv').config()
+    require('dotenv').config({ path: '/vault/secrets/env' })
     return process.env.DB_BASE_URI
   } else {
     try {
