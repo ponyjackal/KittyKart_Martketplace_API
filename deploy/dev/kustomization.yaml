@@ -4,7 +4,6 @@ namespace: dev
 
 resources:
 - ../base
-- secrets.yaml
 
 images:
 - name: 159049020511.dkr.ecr.us-east-1.amazonaws.com/kittykart-marketplace
@@ -13,13 +12,6 @@ images:
 replicas:
 - count: 1
   name: marketplace
-
-configMapGenerator:
-- behavior: merge
-  literals:
-  - LOG_LEVEL=debug
-  - NODE_ENV=development
-  name: marketplace-api-config
 
 patchesJson6902:
 - patch: |-

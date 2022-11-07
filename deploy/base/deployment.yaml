@@ -8,6 +8,22 @@ metadata:
 spec:
   template:
     metadata:
+      annotations:        
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-inject-status: 'update'
+        vault.hashicorp.com/agent-pre-populate-only: 'true'
+        vault.hashicorp.com/ca-cert: '/vault/tls/ca.crt'
+        vault.hashicorp.com/tls-secret: 'vault-tls-client'
+        vault.hashicorp.com/role: 'adminsvc'
+        vault.hashicorp.com/agent-inject-secret-env: 'kv/data/marketplacesvc'
+        vault.hashicorp.com/secret-volume-path-env: '/app'
+        vault.hashicorp.com/agent-inject-file-env: '.env'
+        vault.hashicorp.com/agent-inject-template-env: |
+          {{- with secret "kv/data/marketplacesvc" -}}
+          {{ range $k, $v := .Data.data.env }}
+          export {{ $k }}={{ $v }}
+          {{ end }}
+          {{- end -}}
       labels:
         app.kubernetes.io/application: marketplace
         app.kubernetes.io/component: api
@@ -44,11 +60,6 @@ spec:
                   fieldPath: metadata.labels['app.kubernetes.io/dnsname']
             - name: BASE_URL
               value: https://$(DNS_NAME)
-          envFrom:
-            - configMapRef:
-                name: marketplace-api-config
-            - secretRef:
-                name: marketplace-api-secrets
           livenessProbe:
             httpGet:
               path: /
