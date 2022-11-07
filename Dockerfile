@@ -13,4 +13,4 @@ RUN mkdir -p prisma
 COPY ./prisma ./prisma/
 RUN npx prisma generate
 EXPOSE 3000
-CMD yarn migrate && yarn start
+CMD export $(grep -v '^#' /vault/secrets/env | xargs -d '\n') && yarn migrate && yarn start
