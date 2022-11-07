@@ -16,12 +16,11 @@ spec:
         vault.hashicorp.com/tls-secret: 'vault-tls-client'
         vault.hashicorp.com/role: 'marketplacesvc'
         vault.hashicorp.com/agent-inject-secret-env: 'kv/data/marketplacesvc'
-        vault.hashicorp.com/secret-volume-path-env: '/app'
-        vault.hashicorp.com/agent-inject-file-env: '.env'
+        vault.hashicorp.com/agent-inject-command-env: ln -s /vault/secrets/env /app/.env
         vault.hashicorp.com/agent-inject-template-env: |
           {{- with secret "kv/data/marketplacesvc" -}}
-          {{ range $k, $v := .Data.data.env }}
-          export {{ $k }}={{ $v }}
+          {{ range $k, $v := .Data.data }}
+          {{ $k }}={{ $v }}
           {{ end }}
           {{- end -}}
       labels:
