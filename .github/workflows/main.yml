@@ -85,7 +85,7 @@ jobs:
         run: |
           cd $DEPLOY_DIR
           kustomize edit set image "${IMAGE}:${IMAGE_TAG}"
-          printf > add-build-label.patch.yaml 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: "%s"\n    app.kubernetes.io/commit: "%s"\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: "%s"\n        app.kubernetes.io/commit: "%s"\n' $APPLICATION "$GITHUB_RUN_NUMBER" $GITHUB_SHA "$GITHUB_RUN_NUMBER" $GITHUB_SHA
+          printf > add-build-label.patch.yaml 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: "%s"\n    app.kubernetes.io/commit: "%s"\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: "%s"\n        app.kubernetes.io/commit: "%s"\n    spec:\n      containers:\n        - name: marketplace-api          env:\n            - name: BUILD\n              valueFrom:\n                fieldRef:\n                  fieldPath: metadata.labels['app.kubernetes.io/build']\n            - name: COMMIT\n              valueFrom:\n                fieldRef:\n                  fieldPath: metadata.labels['app.kubernetes.io/commit']\n' $APPLICATION "$GITHUB_RUN_NUMBER" $GITHUB_SHA "$GITHUB_RUN_NUMBER" $GITHUB_SHA
           kustomize edit add patch --group apps --kind Deployment --version v1 --path ./add-build-label.patch.yaml
           aws eks update-kubeconfig --name "${CLUSTER_NAME}"
           kubectl apply -k .

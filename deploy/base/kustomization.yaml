@@ -3,7 +3,6 @@ commonLabels:
 buildMetadata: [managedByLabel]
 resources:
   - certificate.yaml
-  - configMap.yaml
   - deployment.yaml
   - ingress.yaml
   - service.yaml
