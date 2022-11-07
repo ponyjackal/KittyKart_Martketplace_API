@@ -40,12 +40,12 @@ const extractDbNameUrl = (file) => {
 
 // works for local development
 const defaultDbBaseUri = () => {
-  if (fs.existsSync(".env")) {
-    require('dotenv').config()
-    return process.env.DB_BASE_URI
-  } else if (fs.existsSync("/vault/secrets/env")) {
-    require('dotenv').config({ path: '/vault/secrets/env' })
-    return process.env.DB_BASE_URI
+  if (fs.existsSync("/vault/secrets/env")) {
+    console.log('Found /vault/secrets/env')
+    const dotenv = require('dotenv')
+    const { DB_BASE_URI } = dotenv.config({ path: '/vault/secrets/env' })
+    console.log({ DB_BASE_URI })
+    return DB_BASE_URI
   } else {
     try {
       const port = execSync(
