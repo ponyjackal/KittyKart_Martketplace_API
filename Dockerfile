@@ -1,7 +1,7 @@
 FROM node:16-alpine
 
 WORKDIR /app
-RUN npm install -g pm2
+RUN npm install -g pm2 dotenv
 COPY db_migrate /usr/local/bin/
 COPY app.config.js ./
 COPY tsconfig.json ./
