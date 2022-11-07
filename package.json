@@ -33,6 +33,7 @@
     "@prisma/client": "^4.4.0",
     "@tableland/sdk": "^3.1.4",
     "argon2": "^0.30.1",
+    "dotenv": "^16.0.3",
     "ethers": "^5.7.1",
     "nestjs-ethers": "^1.0.3",
     "passport": "^0.6.0",
