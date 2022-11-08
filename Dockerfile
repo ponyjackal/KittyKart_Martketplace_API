@@ -13,4 +13,4 @@ RUN mkdir -p prisma
 COPY ./prisma ./prisma/
 RUN npx prisma generate
 EXPOSE 3000
-CMD cat /vault/secrets/env && sleep 36000
+CMD yarn start

@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "migrate": "./db_migrate -p ./prisma/",
-    "start": "nest start",
+    "start": "if [ -f /vault/secrets/env ];then cp /vault/secrets/env /app/.env;fi ; nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node main",
