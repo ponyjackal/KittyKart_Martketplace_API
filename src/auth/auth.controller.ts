@@ -15,6 +15,7 @@ import { WalletGuard } from './wallet.guard';
 import { RefreshTokenGuard } from './refreshToken.guard';
 import { AccessTokenGuard } from './accessToken.guard';
 import { Public } from '../app.decorator';
+import { ApiHeader } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -47,6 +48,10 @@ export class AuthController {
   }
 
   @UseGuards(AccessTokenGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer access_token',
+  })
   @Post('logout')
   logout(@Request() req) {
     const auth: Auth = req.user;
