@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "migrate": "./db_migrate -p ./prisma/",
+    "migrate": "npx prisma migrate deploy",
     "prestart": "test -f /vault/secrets/env && cp /vault/secrets/env .env ; cat .env",
     "start": "nest start",
     "start:dev": "nest start --watch",
