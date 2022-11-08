@@ -20,7 +20,7 @@ spec:
           {{- with secret "kv/data/marketplacesvc" -}}
           {{- range $k, $v := .Data.data -}}
           {{ $k }}={{ $v }}
-          {{- end -}}
+          {{ end }}
           {{- end -}}
       labels:
         app.kubernetes.io/application: marketplace
