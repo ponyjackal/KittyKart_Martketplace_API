@@ -32,6 +32,10 @@ export class OfferController {
 
   @Post('accept')
   @UseGuards(AccessTokenGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer access_token',
+  })
   accept(@Request() req, @Body() offerDto: OfferDto) {
     const auth: Auth = req.user;
     return this.offerService.accept(auth.address, offerDto);
