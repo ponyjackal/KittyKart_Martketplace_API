@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "migrate": "npx prisma migrate deploy",
-    "prestart": "test -f /vault/secrets/env && cp /vault/secrets/env .env ; cat .env",
+    "prestart": "test -f /vault/secrets/env && cp /vault/secrets/env .env && yarn migrate",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
