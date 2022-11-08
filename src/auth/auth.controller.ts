@@ -15,7 +15,7 @@ import { WalletGuard } from './wallet.guard';
 import { RefreshTokenGuard } from './refreshToken.guard';
 import { AccessTokenGuard } from './accessToken.guard';
 import { Public } from '../app.decorator';
-import { ApiHeader } from '@nestjs/swagger';
+import { ApiHeader, ApiBody } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +23,19 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(WalletGuard)
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        address: {
+          type: 'string',
+        },
+        signature: {
+          type: 'string',
+        },
+      },
+    },
+  })
   async login(@Request() req, @Res() res: Response) {
     const auth: Auth = req.user;
     // generate jwt token
