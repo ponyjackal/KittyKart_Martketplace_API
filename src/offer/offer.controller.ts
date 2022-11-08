@@ -12,6 +12,7 @@ import { OfferService } from './offer.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { OfferDto } from './dto/offer.dto';
 import { Public } from '../app.decorator';
+import { ApiBody, ApiHeader } from '@nestjs/swagger';
 
 @Controller('offer')
 export class OfferController {
@@ -19,6 +20,11 @@ export class OfferController {
 
   @Post()
   @UseGuards(AccessTokenGuard)
+  @ApiBody({ type: OfferDto })
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer access_token',
+  })
   create(@Request() req, @Body() offerDto: OfferDto) {
     const auth: Auth = req.user;
     return this.offerService.create(auth, offerDto);
