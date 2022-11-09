@@ -10,7 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "migrate": "npx prisma migrate deploy",
-    "start": "nest start $([[ $LOG_LEVEL == \"debug\" ]] && echo --$LOG_LEVEL)",
+    "start": "[[ $LOG_LEVEL == \"debug\" ]] && nest start --debug || nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
