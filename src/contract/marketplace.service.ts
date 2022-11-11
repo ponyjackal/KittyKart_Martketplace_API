@@ -35,32 +35,4 @@ export class MarketplaceService {
       throw new BadRequestException('Invalid tx signature');
     }
   }
-
-  async list(contractAddress: string, tokenId: number, price: number) {
-    this.logger.log(
-      `list contractAddress: ${contractAddress}, tokenId: ${tokenId}, price: ${price}`,
-    );
-    return await this.contract.list(contractAddress, tokenId, price);
-  }
-
-  async buy(contractAddress: string, tokenId: number, amount: number) {
-    this.logger.log(
-      `buy contractAddress: ${contractAddress}, tokenId: ${tokenId}, amount: ${amount}`,
-    );
-    return await this.contract.buy(contractAddress, tokenId, amount);
-  }
-
-  async makeOffer(contractAddress: string, tokenId: number, amount: number) {
-    this.logger.log(
-      `buy contractAddress: ${contractAddress}, tokenId: ${tokenId}, amount: ${amount}`,
-    );
-    return await this.contract.makeOffer(contractAddress, tokenId, amount);
-  }
-
-  async acceptOffer(contractAddress: string, tokenId: number) {
-    this.logger.log(
-      `buy contractAddress: ${contractAddress}, tokenId: ${tokenId}`,
-    );
-    return await this.contract.acceptOffer(contractAddress, tokenId);
-  }
 }
