@@ -30,12 +30,6 @@ export class AccountService {
     const karts = await this.tableland.getKartsByAddress(address);
     const assets = await this.tableland.getAssetsByAddress(address);
 
-    this.logger.log(
-      `finished fetching karts and assets from tableland karts: ${JSON.stringify(
-        karts,
-      )} assets: ${JSON.stringify(assets)}`,
-    );
-
     this.logger.log(`updating account table`);
 
     const user = await this.prisma.account.upsert({
@@ -53,12 +47,15 @@ export class AccountService {
         assets: Array.isArray(assets) ? assets : [assets],
       },
     };
+
     this.logger.log(`return result: ${JSON.stringify(result)}`);
 
     return result;
   }
 
   updateSignature(address: string, signature: string) {
+    this.logger.log(`update signature in account table; address: ${address}`);
+
     return this.prisma.account.update({
       where: { address: address.toLowerCase() },
       data: { signature },
@@ -66,6 +63,8 @@ export class AccountService {
   }
 
   update(address: string, updateAccountDto: UpdateAccountDto) {
+    this.logger.log(`update account table; address: ${address}`);
+
     return this.prisma.account.update({
       where: { address: address.toLowerCase() },
       data: updateAccountDto,
@@ -73,6 +72,8 @@ export class AccountService {
   }
 
   remove(address: string) {
+    this.logger.log(`remove account from table; address: ${address}`);
+
     return this.prisma.account.delete({
       where: { address: address.toLowerCase() },
     });
