@@ -33,6 +33,7 @@ spec:
         - name: marketplace-api
           image: 159049020511.dkr.ecr.us-east-1.amazonaws.com/kittykart-marketplace
           imagePullPolicy: Always
+          terminationMessagePolicy: FallbackToLogsOnError
           ports:
             - containerPort: 3000
           env:
