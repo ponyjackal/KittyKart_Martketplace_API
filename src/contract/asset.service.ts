@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   EthersContract,
   InjectContractProvider,
@@ -8,6 +8,7 @@ import ABI from './abis/KittyKartAsset.json';
 
 @Injectable()
 export class AssetService {
+  private readonly logger = new Logger(AssetService.name);
   private contract: Contract;
 
   constructor(
@@ -21,10 +22,15 @@ export class AssetService {
   }
 
   async transferFrom(from: string, to: string, tokenId: number) {
+    this.logger.log(
+      `transferFrom from: ${from}, to: ${to}, tokenId: ${tokenId}`,
+    );
     return await this.contract.transferFrom(from, to, tokenId);
   }
 
   async OwnerOf(tokenId: number): Promise<string> {
+    this.logger.log(`OwnerOf tokenId: ${tokenId}`);
+
     return await this.contract.ownerOf(tokenId);
   }
 }

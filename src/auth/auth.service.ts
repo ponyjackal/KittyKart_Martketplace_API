@@ -2,6 +2,7 @@ import {
   Injectable,
   ForbiddenException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { utils } from 'ethers';
@@ -14,12 +15,19 @@ import { checksumAddress } from 'src/utils/checkSumAddress';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(private jwtService: JwtService, private prisma: PrismaService) {}
 
   async findOne(address: string): Promise<Auth> {
+    this.logger.log(`findOne address: ${address}`);
+
     if (!utils.isAddress(address)) {
+      this.logger.error(`Invalid address: ${address}`);
       throw new BadRequestException('Not a valid address');
     }
+
+    this.logger.log(`finding an addressin auth table; address: ${address}`);
 
     return this.prisma.auth.upsert({
       where: {
@@ -44,6 +52,8 @@ export class AuthService {
   }
 
   updateNonce(address: string) {
+    this.logger.log(`update nonce in auth table; address ${address}`);
+
     return this.prisma.auth.update({
       where: { address: checksumAddress(address) },
       data: { nonce: Math.floor(Math.random() * 1000000) },
@@ -51,6 +61,8 @@ export class AuthService {
   }
 
   async validateAuth(address: string, signature: string): Promise<Auth | null> {
+    this.logger.log(`validating an address: ${address}`);
+
     const auth: Auth = await this.findOne(address);
 
     const signer = ethers.utils.recoverAddress(
@@ -59,8 +71,11 @@ export class AuthService {
     );
 
     if (signer.toLowerCase() === address.toLocaleLowerCase()) {
+      this.logger.log(`auth is valid; auth: ${JSON.stringify(auth)}`);
       return auth;
     }
+
+    this.logger.log(`auth is invalid; address: ${address}`);
 
     return null;
   }
