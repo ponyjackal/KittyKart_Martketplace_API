@@ -16,6 +16,7 @@ services:
 
   prisma-postgres-api:
     stdin_open: true
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
@@ -24,6 +25,8 @@ services:
       - postgres
     ports:
       - "3000:3000"
+    volumes:
+      - ${PWD}/.env:/vault/secrets/env
     restart: always
 
 volumes:

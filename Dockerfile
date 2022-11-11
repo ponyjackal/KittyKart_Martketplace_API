@@ -6,4 +6,4 @@ COPY . ./
 RUN yarn install
 RUN npx prisma generate
 EXPOSE 3000
-CMD yarn start
+CMD yarn start:prod
