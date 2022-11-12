@@ -15,8 +15,9 @@ import { WalletGuard } from './wallet.guard';
 import { RefreshTokenGuard } from './refreshToken.guard';
 import { AccessTokenGuard } from './accessToken.guard';
 import { Public } from '../app.decorator';
-import { ApiHeader, ApiBody } from '@nestjs/swagger';
+import { ApiHeader, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

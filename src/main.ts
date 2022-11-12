@@ -9,6 +9,7 @@ async function bootstrap() {
     .setTitle('KittyKart API Documentation')
     .setDescription('Full API documentation of KittyKart')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
