@@ -10,8 +10,9 @@ import { Auth } from '@prisma/client';
 import { ListingService } from './listing.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { ListingDto } from './dto/listing.dto';
-import { ApiHeader } from '@nestjs/swagger';
+import { ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('listing')
 export class ListingController {
   constructor(private listingService: ListingService) {}
