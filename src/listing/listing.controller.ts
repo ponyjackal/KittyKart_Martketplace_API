@@ -19,10 +19,6 @@ export class ListingController {
 
   @Post()
   @UseGuards(AccessTokenGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer access_token',
-  })
   create(@Request() req, @Body() listingDto: ListingDto) {
     const auth: Auth = req.user;
     return this.listingService.create(auth.address, listingDto);

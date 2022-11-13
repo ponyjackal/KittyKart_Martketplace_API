@@ -14,7 +14,7 @@ import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { Public } from '../app.decorator';
-import { ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @Controller('account')
@@ -23,10 +23,6 @@ export class AccountController {
 
   @Get()
   @UseGuards(AccessTokenGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer access_token',
-  })
   findAll() {
     return this.accountService.findAll();
   }
@@ -39,10 +35,6 @@ export class AccountController {
 
   @Patch()
   @UseGuards(AccessTokenGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer access_token',
-  })
   update(
     @Param('address') address: string,
     @Body() updateAccountDto: UpdateAccountDto,
@@ -52,10 +44,6 @@ export class AccountController {
 
   @Delete()
   @UseGuards(AccessTokenGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer access_token',
-  })
   remove(@Request() req) {
     const auth: Account = req.user;
     return this.accountService.remove(auth.address);
