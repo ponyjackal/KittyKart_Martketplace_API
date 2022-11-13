@@ -62,10 +62,6 @@ export class AuthController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer access_token',
-  })
   @Post('logout')
   logout(@Request() req) {
     const auth: Auth = req.user;

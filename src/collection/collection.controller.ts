@@ -18,10 +18,6 @@ export class CollectionController {
 
   @Post()
   @UseGuards(AccessTokenGuard)
-  @ApiHeader({
-    name: 'Authorization',
-    description: 'Bearer access_token',
-  })
   create(@Request() req, @Body() collectionDto: CollectionDto) {
     return this.collectionService.create(collectionDto);
   }
