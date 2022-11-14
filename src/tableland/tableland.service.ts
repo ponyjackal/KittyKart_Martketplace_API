@@ -1,8 +1,10 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { Connection } from '@tableland/sdk';
 
 @Injectable()
 export class TablelandService {
+  private readonly logger = new Logger(TablelandService.name);
+
   constructor(
     @Inject('TABLELAND_CONNECTION')
     private readonly tbl: Connection,
@@ -17,9 +19,15 @@ export class TablelandService {
       process.env.TABLELAND_KART_METADATA_TABLE
     }.owner='${address.toLowerCase()}' GROUP BY id;`;
 
+    this.logger.log(`started fetching karts from tableland query: ${query}`);
+
     /** using tableland sdk */
     const result = await this.tbl.read(query);
     const karts = result.rows.flat();
+
+    this.logger.log(
+      `finished fetching karts from tableland karts: ${JSON.stringify(karts)}`,
+    );
 
     return karts;
   }
@@ -33,9 +41,17 @@ export class TablelandService {
       process.env.TABLELAND_ASSET_METADATA_TABLE
     }.owner='${address.toLowerCase()}' GROUP BY id;`;
 
+    this.logger.log(`started fetching assets from tableland query: ${query}`);
+
     /** using tableland sdk */
     const result = await this.tbl.read(query);
     const assets = result.rows.flat();
+
+    this.logger.log(
+      `finished fetching karts from tableland assets: ${JSON.stringify(
+        assets,
+      )}`,
+    );
 
     return assets;
   }
