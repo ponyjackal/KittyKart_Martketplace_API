@@ -14,7 +14,9 @@ import { AccountService } from './account.service';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { Public } from '../app.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('account')
 export class AccountController {
   constructor(private accountService: AccountService) {}

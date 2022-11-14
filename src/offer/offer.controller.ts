@@ -12,13 +12,16 @@ import { OfferService } from './offer.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { OfferDto } from './dto/offer.dto';
 import { Public } from '../app.decorator';
+import { ApiBody, ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('offer')
 export class OfferController {
   constructor(private offerService: OfferService) {}
 
   @Post()
   @UseGuards(AccessTokenGuard)
+  @ApiBody({ type: OfferDto })
   create(@Request() req, @Body() offerDto: OfferDto) {
     const auth: Auth = req.user;
     return this.offerService.create(auth, offerDto);
