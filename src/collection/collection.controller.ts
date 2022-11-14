@@ -9,6 +9,9 @@ import {
 import { CollectionService } from './collection.service';
 import { AccessTokenGuard } from '../auth/accessToken.guard';
 import { CollectionDto } from './dto/collection.dto';
+import { ApiHeader, ApiBearerAuth } from '@nestjs/swagger';
+
+@ApiBearerAuth()
 @Controller('collection')
 export class CollectionController {
   constructor(private collectionService: CollectionService) {}
