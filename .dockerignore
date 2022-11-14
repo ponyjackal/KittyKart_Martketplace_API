@@ -3,3 +3,4 @@ docker-compose.yml
 .env*
 .git*
 deploy/*
+postgres-data/*
