@@ -1,0 +1,91 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - '*'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - if: github.ref_type == 'tag'
+        run: |
+          echo "IMAGE_TAG=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          echo "DEPLOY_DIR=deploy/prod" >> $GITHUB_ENV
+      - if: github.ref_type != 'tag'
+        run: |
+          echo "IMAGE_TAG=$(cat package.json| grep version | awk '{print $2}' | tr -d '",')-alpha.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
+          echo "DEPLOY_DIR=deploy/dev" >> $GITHUB_ENV
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Test
+        run: yarn test
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::159049020511:role/github-actions-role
+          aws-region: us-east-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: kittykart-marketplace
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Set up Kustomize
+        uses: yokawasa/action-setup-kube-tools@v0.8.2
+        with:
+          setup-tools: |
+            kustomize
+            kubectl
+          kustomize: '4.5.7'
+          kubectl: '1.25.3'
+      - name: Deploy App
+        env:
+          APPLICATION: marketplace
+          CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+          IMAGE: ${{ steps.login-ecr.outputs.registry }}/kittykart-marketplace
+        run: |
+          cd $DEPLOY_DIR
+          kustomize edit set image "${IMAGE}:${IMAGE_TAG}"
+          printf > add-build-label.patch.yaml 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: %s\n  labels:\n    app.kubernetes.io/build: "%s"\n    app.kubernetes.io/commit: "%s"\nspec:\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/build: "%s"\n        app.kubernetes.io/commit: "%s"\n    spec:\n      containers:\n        - name: marketplace-api\n          env:\n            - name: BUILD\n              value: "%s"\n            - name: COMMIT\n              value: "%s"\n' $APPLICATION "$GITHUB_RUN_NUMBER" $GITHUB_SHA "$GITHUB_RUN_NUMBER" $GITHUB_SHA "$GITHUB_RUN_NUMBER" $GITHUB_SHA
+          kustomize edit add patch --group apps --kind Deployment --version v1 --path ./add-build-label.patch.yaml
+          aws eks update-kubeconfig --name "${CLUSTER_NAME}"
+          kubectl apply -k .
